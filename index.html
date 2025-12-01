@@ -8,20 +8,19 @@
 </head>
 <body>
   <div class="header">
-    <div class="header-left">
-      <img src="https://www.dhl.de/.resources/dhl/webresources/assets/img//dhl-official.svg" alt="DHL Logo">
-      <h1>DHL Routing Container Test (IBU – V3)</h1>
-    </div>
-    <div class="header-right">
-      <a href="config.html" class="config-link" title="Konfiguration">
-        <span class="config-icon">⚙</span><span style="margin-left:6px;font-size:14px;color:var(--dhl-red);">Configuration</span>
-      </a>
-    </div>
+    <img src="https://www.dhl.de/.resources/dhl/webresources/assets/img//dhl-official.svg" alt="DHL Logo">
+    <h1>DHL Routing Container Test (IBU – V3)</h1>
   </div>
 
   <div class="container">
     <label for="subject-id-input">SubjectID eingeben:</label>
     <input id="subject-id-input" type="text" value="JJD149990299999422945" placeholder="z.B. JJD149990299999422945"/>
+
+    <label for="server-url-input">Pega Server URL:</label>
+    <input id="server-url-input" type="text" value="https://depst-mara-stg1-decisionhub.pegacloud.net/prweb" placeholder="https://<server>/prweb"/>
+
+    <label for="container-name-input">Container-Name (z.B. Routing):</label>
+    <input id="container-name-input" type="text" value="Routing" placeholder="ContainerName"/>
 
     <button id="btn-call">Container aufrufen</button>
 
@@ -37,6 +36,5 @@
   <script src="scripts/login.js"></script>
   <script src="scripts/realtimeContainer.js"></script>
   <script src="scripts/subjectInput.js"></script>
-  <script src="scripts/config.js"></script>
 </body>
 </html>
