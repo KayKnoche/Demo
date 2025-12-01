@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>DHL – Routing Container Test (IBU, V3)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <img src="https://www.dhl.de/.resources/dhl/webresources/assets/img//dhl-official.svg" alt="DHL Logo">
+      <h1>DHL Routing Container Test (IBU – V3)</h1>
+    </div>
+    <div class="header-right">
+      <a href="config.html" class="config-link" title="Konfiguration">
+        <span class="config-icon">⚙</span><span style="margin-left:6px;font-size:14px;color:var(--dhl-red);">Configuration</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <label for="subject-id-input">SubjectID eingeben:</label>
+    <input id="subject-id-input" type="text" value="JJD149990299999422945" placeholder="z.B. JJD149990299999422945"/>
+
+    <button id="btn-call">Container aufrufen</button>
+
+    <div id="log"></div>
+
+    <h2>Ergebnis (ShortDescription &amp; Benefits)</h2>
+    <div id="offer-output">Noch keine Daten geladen.</div>
+
+    <h2>Roh-Response</h2>
+    <pre id="raw-response">Noch keine Daten geladen.</pre>
+  </div>
+
+  <script src="scripts/login.js"></script>
+  <script src="scripts/realtimeContainer.js"></script>
+  <script src="scripts/subjectInput.js"></script>
+  <script src="scripts/config.js"></script>
+</body>
+</html>
