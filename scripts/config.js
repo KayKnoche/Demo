@@ -17,27 +17,11 @@
   function saveConfig(cfg) {
     try {
       window.localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg));
-      // Globale Variable bereitstellen, damit andere Skripte darauf zugreifen können
       window.dhlRoutingConfig = cfg;
       return true;
     } catch (e) {
       console.error("Fehler beim Speichern der Konfiguration:", e);
       return false;
-    }
-  }
-
-  function applyConfigToIndex() {
-    const cfg = loadConfig();
-    window.dhlRoutingConfig = cfg;
-
-    const serverInput = document.getElementById("server-url-input");
-    const containerInput = document.getElementById("container-name-input");
-
-    if (serverInput && cfg.serverUrl) {
-      serverInput.value = cfg.serverUrl;
-    }
-    if (containerInput && cfg.containerName) {
-      containerInput.value = cfg.containerName;
     }
   }
 
@@ -52,7 +36,6 @@
       return;
     }
 
-    // Initiales Befüllen
     const cfg = loadConfig();
     if (cfg.serverUrl) serverInput.value = cfg.serverUrl;
     if (cfg.containerName) containerInput.value = cfg.containerName;
@@ -79,13 +62,12 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    // Wenn wir auf der Config-Seite sind:
+    // Globale Konfiguration immer laden
+    window.dhlRoutingConfig = loadConfig();
+
+    // Konfigurationsseite initialisieren, falls wir dort sind
     if (document.getElementById("config-save-btn")) {
       initConfigPage();
-    }
-    // Wenn wir auf der Index-Seite sind:
-    if (document.getElementById("server-url-input") || document.getElementById("container-name-input")) {
-      applyConfigToIndex();
     }
   });
 })();
