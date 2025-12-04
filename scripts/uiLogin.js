@@ -23,7 +23,8 @@
     const loginScreen = document.getElementById("login-screen");
     const appContainer = document.getElementById("app-container");
 
-    if (loginScreen) loginScreen.classList.add("hidden");
+    // Login-Screen komplett entfernen
+    if (loginScreen) loginScreen.remove();
     if (appContainer) appContainer.classList.remove("hidden");
   }
 
