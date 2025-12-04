@@ -17,7 +17,7 @@
         <span class="config-icon">⚙</span>
         <span class="config-text">Configuration</span>
       </a>
-      <button id="logout-btn" class="logout-btn" type="button">Logout</button>
+      <button id="logout-btn" class="logout-btn hidden" type="button">Logout</button>
     </div>
   </div>
 
@@ -35,7 +35,6 @@
       <button id="login-btn">Login</button>
 
       <div id="login-error" class="login-error"></div>
-      <!-- Kein Benutzername/Passwort-Hinweis mehr sichtbar -->
     </div>
   </div>
 
@@ -64,6 +63,7 @@
   <script src="scripts/realtimeContainer.js"></script>
   <script src="scripts/subjectInput.js"></script>
   <script src="scripts/config.js"></script>
-  <script src="scripts/uiLogin.js"></script>
+  <!-- 🔴 Cache-Buster hier: ?v=2 -->
+  <script src="scripts/uiLogin.js?v=2"></script>
 </body>
 </html>
