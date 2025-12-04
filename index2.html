@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>DHL Routing Container Test (IBU – V3)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      color: #111827;
+    }
+
+    /* 🔒 Login Overlay */
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #loginBox {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    #loginBox h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    #loginBox input {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: 1px solid #bbb;
+      font-size: 0.9rem;
+    }
+
+    #loginBox button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      background: #0070f3;
+      color: white;
+      cursor: pointer;
+    }
+
+    #loginBox button:hover {
+      background: #0059c7;
+    }
+
+    #errorMsg {
+      color: #d40511;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      min-height: 1em;
+    }
+
+    /* 🔓 Eigentliche Seite (zunächst versteckt) */
+    #content {
+      display: none;
+    }
+
+    header {
+      background: #d40511;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header img {
+      height: 32px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 20px auto 40px;
+      padding: 0 16px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 8px;
+    }
+
+    .config-link {
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: #374151;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .config-link span {
+      font-size: 1.1rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      margin-right: 6px;
+    }
+
+    input[type="text"] {
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      min-width: 200px;
+    }
+
+    .btn-primary {
+      margin-left: 8px;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #d40511;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    h2 {
+      margin-top: 24px;
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+    }
+
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      overflow-x: auto;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 🔒 LOGIN OVERLAY -->
+<div id="loginOverlay">
+  <div id="loginBox">
+    <h2>Login erforderlich</h2>
+    <input type="text" id="username" placeholder="Benutzername">
+    <input type="password" id="password" placeholder="Passwort">
+    <button onclick="checkLogin()">Login</button>
+    <div id="errorMsg"></div>
+  </div>
+</div>
+
+<!-- 🔓 DEINE DHL-DEMO-SEITE -->
+<div id="content">
+  <header>
+    <img
+      src="https://www.dhl.de/.resources/dhl/webresources/assets/img//dhl-official.svg"
+      alt="DHL Logo"
+      onerror="this.style.display='none';"
+    >
+    <h1>DHL Routing Container Test (IBU – V3)</h1>
+  </header>
+
+  <main class="page">
+    <div class="top-row">
+      <div class="muted">
+        <!-- Subtitel / Beschreibung optional -->
+        Testoberfläche für Routing Container
+      </div>
+      <a href="#config" class="config-link">
+        <span>⚙</span> Configuration
+      </a>
+    </div>
+
+    <section>
+      <label for="subjectId">SubjectID eingeben:</label>
+      <input type="text" id="subjectId" placeholder="z. B. TEST123456">
+      <button class="btn-primary" id="callBtn">Container aufrufen</button>
+    </section>
+
+    <section>
+      <h2>Ergebnis (ShortDescription &amp; Benefits)</h2>
+      <div class="card" id="resultCard">
+        Noch keine Daten geladen.
+      </div>
+    </section>
+
+    <section>
+      <h2>Roh-Response</h2>
+      <pre id="rawResponse">Noch keine Daten geladen.</pre>
+    </section>
+
+    <section id="config">
+      <h2>Configuration</h2>
+      <p class="muted">
+        Diese Demo ist statisch gehostet. Trage im JavaScript bei Bedarf einen echten Routing-Container-Endpoint ein
+        und passe das Mapping an das Response-Format an.
+      </p>
+    </section>
+  </main>
+</div>
+
+<script>
+  // 🔧 Login-Daten (Fake-Login)
+  const VALID_USERNAME = "demo";
+  const VALID_PASSWORD = "Routing2025!";
+
+  function checkLogin() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const error = document.getElementById("errorMsg");
+
+    if (user === VALID_USERNAME && pass === VALID_PASSWORD) {
+      document.getElementById("loginOverlay").style.display = "none";
+      document.getElementById("content").style.display = "block";
+    } else {
+      error.textContent = "Falscher Benutzername oder Passwort.";
+    }
+  }
+
+  // Optional: Login mit Enter-Taste auslösen
+  document.getElementById("password").addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter") {
+      checkLogin();
+    }
+  });
+
+  // 🔧 OPTIONAL: Routing-Container-Endpoint eintragen
+  // Wenn du einen echten Backend-Endpoint hast, hier URL setzen:
+  const CONTAINER_ENDPOINT = ""; // z. B. "https://api.dein-backend.de/routing"
+
+  const callBtn = document.getElementById("callBtn");
+  const subjectInput = document.getElementById("subjectId");
+  const resultCard = document.getElementById("resultCard");
+  const rawResponse = document.getElementById("rawRespo
