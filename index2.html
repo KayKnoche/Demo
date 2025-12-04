@@ -179,6 +179,129 @@
       font-size: 0.9rem;
     }
   </style>
+
+  <!-- Script erst laden, wenn DOM fertig ist -->
+  <script defer>
+    // 🔧 Login-Daten (Fake-Login)
+    const VALID_USERNAME = "demo";
+    const VALID_PASSWORD = "Routing2025!";
+
+    function doLoginCheck() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const error = document.getElementById("errorMsg");
+
+      if (user === VALID_USERNAME && pass === VALID_PASSWORD) {
+        // Overlay ausblenden, Inhalt zeigen
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("content").style.display = "block";
+      } else {
+        error.textContent = "Falscher Benutzername oder Passwort.";
+      }
+    }
+
+    function setup() {
+      const loginButton = document.getElementById("loginButton");
+      const passwordInput = document.getElementById("password");
+
+      loginButton.addEventListener("click", doLoginCheck);
+
+      passwordInput.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          doLoginCheck();
+        }
+      });
+
+      // --- Ab hier DHL-Demo-Logik (wie gehabt) ---
+
+      const CONTAINER_ENDPOINT = ""; // optional: echten Endpoint eintragen
+      const callBtn = document.getElementById("callBtn");
+      const subjectInput = document.getElementById("subjectId");
+      const resultCard = document.getElementById("resultCard");
+      const rawResponse = document.getElementById("rawResponse");
+
+      async function callContainer() {
+        const subjectId = subjectInput.value.trim();
+        if (!subjectId) {
+          resultCard.textContent = "Bitte eine SubjectID eingeben.";
+          return;
+        }
+
+        if (!CONTAINER_ENDPOINT) {
+          // Demo-Verhalten ohne Backend
+          resultCard.textContent =
+            "Demo-Modus (kein echter Endpoint konfiguriert).\n\n" +
+            "SubjectID: " + subjectId + "\n" +
+            "ShortDescription: Beispiel-Routing für " + subjectId + "\n" +
+            "Benefits: Nur zu Demo-Zwecken, keine Live-Daten.";
+          rawResponse.textContent = JSON.stringify({
+            demo: true,
+            subjectId,
+            shortDescription: "Beispiel-Routing für " + subjectId,
+            benefits: [
+              "Nur Demo, kein Backend angebunden",
+              "SubjectID wurde korrekt übernommen"
+            ]
+          }, null, 2);
+          return;
+        }
+
+        // Falls später echter Endpoint genutzt wird:
+        callBtn.disabled = true;
+        resultCard.textContent = "Container wird aufgerufen …";
+        rawResponse.textContent = "Lade …";
+
+        try {
+          const resp = await fetch(CONTAINER_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ subjectId })
+          });
+
+          const data = await resp.json().catch(() => null);
+
+          if (!resp.ok) {
+            throw new Error("HTTP " + resp.status + " – " + (data && data.message ? data.message : "Fehler"));
+          }
+
+          const shortDescription =
+            data.shortDescription ||
+            data.description ||
+            data.message ||
+            "Keine ShortDescription im Response gefunden.";
+
+          let benefitsText = "";
+          if (Array.isArray(data.benefits)) {
+            benefitsText = data.benefits.join(" · ");
+          } else if (typeof data.benefits === "string") {
+            benefitsText = data.benefits;
+          }
+
+          resultCard.textContent = shortDescription + (benefitsText ? "\n\nBenefits: " + benefitsText : "");
+          rawResponse.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          resultCard.textContent = "Fehler beim Aufruf des Containers: " + err.message;
+          rawResponse.textContent = err.stack || String(err);
+        } finally {
+          callBtn.disabled = false;
+        }
+      }
+
+      callBtn.addEventListener("click", callContainer);
+      subjectInput.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          callContainer();
+        }
+      });
+    }
+
+    // DOM fertig → Setup
+    window.addEventListener("DOMContentLoaded", setup);
+  </script>
 </head>
 <body>
 
@@ -188,7 +311,7 @@
     <h2>Login erforderlich</h2>
     <input type="text" id="username" placeholder="Benutzername">
     <input type="password" id="password" placeholder="Passwort">
-    <button onclick="checkLogin()">Login</button>
+    <button id="loginButton">Login</button>
     <div id="errorMsg"></div>
   </div>
 </div>
@@ -207,7 +330,6 @@
   <main class="page">
     <div class="top-row">
       <div class="muted">
-        <!-- Subtitel / Beschreibung optional -->
         Testoberfläche für Routing Container
       </div>
       <a href="#config" class="config-link">
@@ -243,36 +365,5 @@
   </main>
 </div>
 
-<script>
-  // 🔧 Login-Daten (Fake-Login)
-  const VALID_USERNAME = "demo";
-  const VALID_PASSWORD = "Routing2025!";
-
-  function checkLogin() {
-    const user = document.getElementById("username").value.trim();
-    const pass = document.getElementById("password").value.trim();
-    const error = document.getElementById("errorMsg");
-
-    if (user === VALID_USERNAME && pass === VALID_PASSWORD) {
-      document.getElementById("loginOverlay").style.display = "none";
-      document.getElementById("content").style.display = "block";
-    } else {
-      error.textContent = "Falscher Benutzername oder Passwort.";
-    }
-  }
-
-  // Optional: Login mit Enter-Taste auslösen
-  document.getElementById("password").addEventListener("keydown", (ev) => {
-    if (ev.key === "Enter") {
-      checkLogin();
-    }
-  });
-
-  // 🔧 OPTIONAL: Routing-Container-Endpoint eintragen
-  // Wenn du einen echten Backend-Endpoint hast, hier URL setzen:
-  const CONTAINER_ENDPOINT = ""; // z. B. "https://api.dein-backend.de/routing"
-
-  const callBtn = document.getElementById("callBtn");
-  const subjectInput = document.getElementById("subjectId");
-  const resultCard = document.getElementById("resultCard");
-  const rawResponse = document.getElementById("rawRespo
+</body>
+</html>
