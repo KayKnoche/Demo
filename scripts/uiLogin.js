@@ -19,6 +19,16 @@
     }
   }
 
+  function updateLogoutVisibility(loggedIn) {
+    const btn = document.getElementById("logout-btn");
+    if (!btn) return;
+    if (loggedIn) {
+      btn.classList.remove("hidden");
+    } else {
+      btn.classList.add("hidden");
+    }
+  }
+
   function showApp() {
     const loginScreen = document.getElementById("login-screen");
     const appContainer = document.getElementById("app-container");
@@ -26,6 +36,8 @@
     // Login-Screen komplett entfernen
     if (loginScreen) loginScreen.remove();
     if (appContainer) appContainer.classList.remove("hidden");
+
+    updateLogoutVisibility(true);
   }
 
   function showLogin() {
@@ -34,6 +46,23 @@
 
     if (loginScreen) loginScreen.classList.remove("hidden");
     if (appContainer) appContainer.classList.add("hidden");
+
+    updateLogoutVisibility(false);
+  }
+
+  function initLogout() {
+    const btn = document.getElementById("logout-btn");
+    if (!btn) return;
+
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      setLoggedIn(false);
+      // Seite neu laden, damit wieder der Login-Screen erscheint
+      window.location.reload();
+    });
+
+    // Sichtbarkeit initial je nach Zustand setzen
+    updateLogoutVisibility(isLoggedIn());
   }
 
   function initLogin() {
@@ -87,5 +116,8 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", initLogin);
+  document.addEventListener("DOMContentLoaded", function () {
+    initLogout();
+    initLogin();
+  });
 })();
