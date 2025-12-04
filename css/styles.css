@@ -67,6 +67,23 @@ body {
   line-height: 1;
 }
 
+/* Logout Button im Header */
+.logout-btn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--dhl-red);
+  background: #ffffff;
+  color: var(--dhl-red);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #ffe680;
+}
+
 /* Layout */
 .container {
   max-width: 900px;
@@ -175,24 +192,27 @@ h2 {
   font-weight: bold;
 }
 
-/* Login UI */
+/* Login UI als Vollbild-Overlay */
 
 .hidden {
   display: none;
 }
 
 .login-screen {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  z-index: 1000;
 }
 
 .login-card {
   background: #ffffff;
   padding: 24px 28px;
   border-radius: 8px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
   max-width: 360px;
   width: 100%;
 }
