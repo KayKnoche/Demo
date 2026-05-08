@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHL Paketübersicht</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ffcc00;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d40511;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .package-count {
+            background-color: #d40511;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* Gelbe Benachrichtigungsbox */
+        .notification-box {
+            background-color: #ffefb9;
+            margin: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .notification-text {
+            font-weight: 500;
+        }
+
+        .notification-button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Sendungsverfolgung */
+        .tracking-section {
+            background-color: white;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .tracking-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .tracking-input {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tracking-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .search-btn {
+            background-color: #d40511;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .filter-link {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .archive-note {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        /* Empfangen Sie Ihre Pakete */
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 30px 20px 15px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px;
+        }
+
+        .service-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .service-link {
+            color: #d40511;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Footer Banner */
+        .footer-banner {
+            background-color: #ffcc00;
+            margin: 30px 20px 20px 20px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .notification-box {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">DHL</div>
+            <div class="nav-links">
+                <a href="#">Pakete versenden</a>
+                <a href="#">Pakete empfangen</a>
+                <a href="#">Hilfe und Kontakt</a>
+            </div>
+            <div class="user-info">
+                <span>Kay Knoche</span>
+                <span class="package-count">55 Pakete</span>
+            </div>
+        </div>
+
+        <!-- Digitale Benachrichtigung -->
+        <div class="notification-box">
+            <div class="notification-text">
+                <strong>📱 DIGITALE BENACHRICHTIGUNG DIREKT AUFS HANDY</strong><br>
+                Sofort per E-Mail und App erfahren, wo Ihr Paket hinterlegt wurde.
+            </div>
+            <button class="notification-button">Weiter</button>
+        </div>
+
+        <!-- Sendung verfolgen -->
+        <div class="tracking-section">
+            <div class="tracking-title">Sendung verfolgen</div>
+            <div class="tracking-input">
+                <input type="text" placeholder="Sendungsnummer">
+                <button class="search-btn">Q Suchen</button>
+            </div>
+            <div class="filter-link">
+                <a href="#" style="color:#666; text-decoration:none;">Filtern</a> | <a href="#" style="color:#666; text-decoration:none;">Archiv einblenden</a>
+            </div>
+            <div class="archive-note">
+                Nach 21 Tagen werden Sendungen im Archiv gespeichert, für die ggf. eine längere Beauskunft möglich ist.
+            </div>
+        </div>
+
+        <!-- Empfangen Sie Ihre Pakete noch bequemer -->
+        <div class="section-title">Empfangen Sie Ihre Pakete noch bequemer</div>
+        <div style="margin: 0 20px 10px 20px; font-size: 14px; color: #555;">
+            Unter Meine Daten & Services können Sie die Einstellungen für Ihren Paketempfang jederzeit ändern.
+        </div>
+
+        <!-- Service Karten -->
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>DHL Ablageort</h3>
+                <p>Wählen Sie einen Ablageort auf Ihrem Großstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
+                <a href="#" class="service-link">Mehr erfahren &gt;</a>
+            </div>
+            <div class="service-card">
+                <h3>Digitale Benachrichtigung</h3>
+                <p>Sofort per E-Mail und App erfahren, wo Sie Ihr zugestelltes Paket abholen können.</p>
+                <a href="#" class="service-link">Mehr erfahren &gt;</a>
+            </div>
+            <div class="service-card">
+                <h3>Paketankündigung erhalten</h3>
+                <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
+                <a href="#" class="service-link">Mehr erfahren &gt;</a>
+            </div>
+        </div>
+
+        <!-- Footer Banner -->
+        <div class="footer-banner">
+            Schon ab 4,19 EUR deutschlandweit versenden
+        </div>
+    </div>
+</body>
+</html>
