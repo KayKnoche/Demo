@@ -166,6 +166,7 @@
         }
 
         .stage-btn {
+            display: inline-block;
             background: #ffcc00;
             color: #1a1a1a;
             border: none;
@@ -174,6 +175,7 @@
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
+            text-decoration: none;
             transition: transform 0.2s;
         }
 
@@ -285,6 +287,7 @@
         }
 
         .teaser-btn {
+            display: inline-block;
             background: #ffcc00;
             color: #1a1a1a;
             border: none;
@@ -293,6 +296,7 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 13px;
+            text-decoration: none;
             transition: background 0.2s;
         }
 
@@ -435,7 +439,7 @@
                     <div class="teaser-card-content">
                         <h3>DHL Ablageort</h3>
                         <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
-                        <button class="teaser-btn static-left">Mehr erfahren</button>
+                        <a href="#" class="teaser-btn static-left" target="_self">Mehr erfahren</a>
                     </div>
                 </div>
 
@@ -453,7 +457,7 @@
                     <div class="teaser-card-content">
                         <h3>Paketankündigung erhalten</h3>
                         <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
-                        <button class="teaser-btn static-right">Mehr erfahren</button>
+                        <a href="#" class="teaser-btn static-right" target="_self">Mehr erfahren</a>
                     </div>
                 </div>
             </div>
@@ -573,7 +577,7 @@
         return container.RankedResults[0];
     }
 
-    // Rendert Stage-Bereich (öffnet im gleichen Tab)
+    // Rendert Stage-Bereich mit echten <a>-Links
     function renderStage(result) {
         const stageContainer = document.getElementById("stageContent");
         const imageUrl = result.ImageURL || "";
@@ -588,17 +592,10 @@
                 <div class="stage-text-box">
                     <h2>${escapeHtml(title)}</h2>
                     <p>${escapeHtml(benefits)}</p>
-                    <button class="stage-btn" data-url="${escapeHtml(clickThroughUrl)}">Weiter</button>
+                    <a href="${escapeHtml(clickThroughUrl)}" class="stage-btn" target="_self">Weiter</a>
                 </div>
             </div>
         `;
-
-        const btn = stageContainer.querySelector('.stage-btn');
-        if (btn && btn.dataset.url && btn.dataset.url !== '#') {
-            btn.addEventListener('click', () => {
-                window.location.href = btn.dataset.url;
-            });
-        }
     }
 
     // Zeigt "No Offers available" im Stage-Bereich an
@@ -614,7 +611,7 @@
         `;
     }
 
-    // Rendert die mittlere Teaser-Kachel (öffnet im gleichen Tab)
+    // Rendert die mittlere Teaser-Kachel mit echten <a>-Links
     function renderMiddleTeaser(result) {
         const imageUrl = result.ImageURL || "";
         const title = result.ShortDescription || result.Label || "Service-Tipp";
@@ -634,15 +631,8 @@
         contentDiv.innerHTML = `
             <h3>${escapeHtml(title)}</h3>
             <p>${escapeHtml(benefits)}</p>
-            <button class="teaser-btn" data-url="${escapeHtml(clickThroughUrl)}">Mehr erfahren</button>
+            <a href="${escapeHtml(clickThroughUrl)}" class="teaser-btn" target="_self">Mehr erfahren</a>
         `;
-
-        const btn = contentDiv.querySelector('.teaser-btn');
-        if (btn && btn.dataset.url && btn.dataset.url !== '#') {
-            btn.addEventListener('click', () => {
-                window.location.href = btn.dataset.url;
-            });
-        }
     }
 
     // Zeigt "No Offers available" in der mittleren Kachel an
@@ -667,7 +657,7 @@
                 <div class="stage-text-box">
                     <h2>DHL SmartDelivery</h2>
                     <p>Bestimmen Sie selbst, wann und wo Ihre Pakete ankommen.</p>
-                    <button class="stage-btn">Weiter</button>
+                    <a href="#" class="stage-btn" target="_self">Weiter</a>
                 </div>
             </div>
         `;
@@ -753,31 +743,11 @@
             .replace(/'/g, '&#39;');
     }
 
-    // Event Listener für statische Teaser-Buttons (linke + rechte Kachel) - gleicher Tab
-    function bindStaticTeaserButtons() {
-        // Linke Kachel Button
-        const leftBtn = document.querySelector('.teaser-grid .teaser-card:first-child .teaser-btn');
-        if (leftBtn) {
-            leftBtn.addEventListener('click', () => {
-                window.location.href = '#';
-            });
-        }
-        
-        // Rechte Kachel Button
-        const rightBtn = document.querySelector('.teaser-grid .teaser-card:last-child .teaser-btn');
-        if (rightBtn) {
-            rightBtn.addEventListener('click', () => {
-                window.location.href = '#';
-            });
-        }
-    }
-
     document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
     
     // Seite laden + erster Call
     document.addEventListener("DOMContentLoaded", () => {
         loadAllContent();
-        bindStaticTeaserButtons();
     });
 </script>
 </body>
