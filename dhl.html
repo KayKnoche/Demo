@@ -109,7 +109,6 @@
             border-radius: 12px;
             margin-bottom: 30px;
             background: #fff;
-            transition: all 0.2s ease;
             overflow: hidden;
         }
 
@@ -121,7 +120,6 @@
             font-size: 12px;
             font-weight: bold;
             border-radius: 0 0 8px 0;
-            margin-bottom: 0;
         }
 
         .stage-content {
@@ -184,33 +182,6 @@
             background: #e6b800;
         }
 
-        /* gelbe Box (statisch) */
-        .alert-box {
-            background: #ffefb9;
-            border-radius: 12px;
-            padding: 18px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .alert-text strong {
-            font-size: 18px;
-            display: block;
-            margin-bottom: 5px;
-        }
-        .alert-btn {
-            background: #ffcc00;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
         /* tracking kasten */
         .tracking-card {
             border: 1px solid #ddd;
@@ -247,7 +218,7 @@
             cursor: pointer;
         }
 
-        /* ===== TEASER BEREICH (dynamisch, rot umrandet) ===== */
+        /* ===== TEASER BEREICH (3 Kacheln, rot umrandet) ===== */
         .teaser-container {
             border: 3px solid #ff0000;
             border-radius: 12px;
@@ -263,11 +234,6 @@
             font-size: 12px;
             font-weight: bold;
             border-radius: 0 0 8px 0;
-            margin-bottom: 0;
-        }
-
-        .teaser-content {
-            padding: 0;
         }
 
         .teaser-grid {
@@ -279,45 +245,42 @@
 
         .teaser-card {
             flex: 1;
-            min-width: 250px;
+            min-width: 220px;
+            background: white;
+            border: 1px solid #e0e0e0;
             border-radius: 12px;
             overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .teaser-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .teaser-card-image {
+            width: 100%;
+            height: 180px;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            position: relative;
-            min-height: 280px;
-            display: flex;
-            align-items: flex-end;
+            background-color: #f0f0f0;
         }
 
-        .teaser-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
+        .teaser-card-content {
+            padding: 16px;
         }
 
-        .teaser-text-box {
-            position: relative;
-            z-index: 2;
-            color: white;
-            padding: 20px;
-            width: 100%;
-            background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent);
-        }
-
-        .teaser-text-box h3 {
-            font-size: 22px;
+        .teaser-card-content h3 {
+            font-size: 18px;
             margin-bottom: 8px;
+            color: #d40511;
         }
 
-        .teaser-text-box p {
+        .teaser-card-content p {
             font-size: 14px;
-            margin-bottom: 12px;
+            color: #555;
+            margin-bottom: 16px;
             line-height: 1.4;
         }
 
@@ -330,10 +293,20 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 13px;
+            transition: background 0.2s;
         }
 
         .teaser-btn:hover {
             background: #e6b800;
+        }
+
+        .no-offers-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
         }
 
         /* gelber banner */
@@ -443,15 +416,7 @@
             </div>
         </div>
 
-        <!-- Statische Elemente (DHL Standard) -->
-        <div class="alert-box">
-            <div class="alert-text">
-                <strong>🔔 DIGITALE BENACHRICHTIGUNG DIREKT AUFS HANDY</strong>
-                Sofort per E-Mail und App erfahren, wo Ihr Paket hinterlegt wurde.
-            </div>
-            <button class="alert-btn">Weiter</button>
-        </div>
-
+        <!-- Tracking (statisch) -->
         <div class="tracking-card">
             <div class="tracking-title">Sendung verfolgen</div>
             <div class="tracking-row">
@@ -460,11 +425,37 @@
             </div>
         </div>
 
-        <!-- ===== DYNAMISCHER TEASER BEREICH ===== -->
+        <!-- ===== TEASER BEREICH (3 Kacheln) ===== -->
         <div class="teaser-container">
-            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH)</div>
-            <div class="teaser-content" id="teaserContent">
-                <div class="loader">Lade Teaser-Inhalte von Pega CDH...</div>
+            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH - mittlere Kachel)</div>
+            <div class="teaser-grid" id="teaserGrid">
+                <!-- Linke Kachel: statisch -->
+                <div class="teaser-card">
+                    <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-packstation-dhl-de.png');"></div>
+                    <div class="teaser-card-content">
+                        <h3>DHL Ablageort</h3>
+                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
+                        <button class="teaser-btn">Mehr erfahren</button>
+                    </div>
+                </div>
+
+                <!-- MITTLERE Kachel: dynamisch via Pega GetTeaser -->
+                <div class="teaser-card" id="dynamicTeaserCard">
+                    <div class="teaser-card-image" id="dynamicTeaserImage" style="background-color: #f0f0f0;"></div>
+                    <div class="teaser-card-content" id="dynamicTeaserContent">
+                        <div class="loader">Lade Inhalt...</div>
+                    </div>
+                </div>
+
+                <!-- Rechte Kachel: statisch -->
+                <div class="teaser-card">
+                    <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-ankuendigung-dhl-de.png');"></div>
+                    <div class="teaser-card-content">
+                        <h3>Paketankündigung erhalten</h3>
+                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
+                        <button class="teaser-btn">Mehr erfahren</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -553,6 +544,18 @@
         return data;
     }
 
+    // Prüft ob "No Offers available" vorliegt
+    function hasNoOffers(response, containerName) {
+        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
+        if (!container) return true;
+        
+        // Prüfe auf "No Offers" Status oder leere RankedResults
+        if (container.Status === "No Offers available") return true;
+        if (!container.RankedResults || container.RankedResults.length === 0) return true;
+        
+        return false;
+    }
+
     // Extrahiert das erste RankedResult aus der Response
     function extractFirstResult(response, containerName) {
         if (response.Status !== "OK") {
@@ -560,12 +563,12 @@
         }
 
         const container = response.ContainerList?.find(c => c.ContainerName === containerName);
-        if (!container || container.Status !== "OK") {
-            throw new Error(`Container ${containerName} nicht gefunden oder nicht OK`);
+        if (!container) {
+            throw new Error(`Container ${containerName} nicht gefunden`);
         }
 
-        if (!container.RankedResults || container.RankedResults.length === 0) {
-            throw new Error(`Keine RankedResults für ${containerName}`);
+        if (container.Status === "No Offers available" || !container.RankedResults || container.RankedResults.length === 0) {
+            throw new Error("No Offers available");
         }
 
         return container.RankedResults[0];
@@ -579,7 +582,6 @@
         const benefits = result.Benefits || "";
         const clickThroughUrl = result.ClickThroughURL || "#";
 
-        // Hintergrundbild-URL
         const bgImageStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
 
         stageContainer.innerHTML = `
@@ -592,7 +594,6 @@
             </div>
         `;
 
-        // Button Click-Event
         const btn = stageContainer.querySelector('.stage-btn');
         if (btn && btn.dataset.url && btn.dataset.url !== '#') {
             btn.addEventListener('click', () => {
@@ -601,57 +602,54 @@
         }
     }
 
-    // Rendert Teaser-Bereich (alle RankedResults)
-    function renderTeaser(response) {
-        const teaserContainer = document.getElementById("teaserContent");
-        
-        // Finde den GetTeaser Container
-        const teaserContainerObj = response.ContainerList?.find(c => c.ContainerName === "GetTeaser");
-        
-        if (!teaserContainerObj || !teaserContainerObj.RankedResults || teaserContainerObj.RankedResults.length === 0) {
-            teaserContainer.innerHTML = renderTeaserFallback();
-            return;
+    // Rendert die mittlere Teaser-Kachel
+    function renderMiddleTeaser(result) {
+        const imageUrl = result.ImageURL || "";
+        const title = result.ShortDescription || result.Label || "Service-Tipp";
+        const benefits = result.Benefits || "";
+        const clickThroughUrl = result.ClickThroughURL || "#";
+
+        // Bildbereich
+        const imageDiv = document.getElementById("dynamicTeaserImage");
+        if (imageUrl) {
+            imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
+            imageDiv.style.backgroundSize = "cover";
+            imageDiv.style.backgroundPosition = "center";
+        } else {
+            imageDiv.style.backgroundColor = "#f0f0f0";
         }
 
-        const results = teaserContainerObj.RankedResults;
-        
-        const teaserHtml = `
-            <div class="teaser-grid">
-                ${results.map(result => {
-                    const imageUrl = result.ImageURL || "";
-                    const title = result.ShortDescription || result.Label || "Service-Tipp";
-                    const benefits = result.Benefits || "";
-                    const clickThroughUrl = result.ClickThroughURL || "#";
-                    const bgImageStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #555;';
-                    
-                    return `
-                        <div class="teaser-card" style="${bgImageStyle}">
-                            <div class="teaser-text-box">
-                                <h3>${escapeHtml(title)}</h3>
-                                <p>${escapeHtml(benefits)}</p>
-                                <button class="teaser-btn" data-url="${escapeHtml(clickThroughUrl)}">Mehr erfahren</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
+        // Content Bereich
+        const contentDiv = document.getElementById("dynamicTeaserContent");
+        contentDiv.innerHTML = `
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(benefits)}</p>
+            <button class="teaser-btn" data-url="${escapeHtml(clickThroughUrl)}">Mehr erfahren</button>
         `;
-        
-        teaserContainer.innerHTML = teaserHtml;
 
-        // Buttons mit Click-Events versehen
-        const btns = teaserContainer.querySelectorAll('.teaser-btn');
-        btns.forEach(btn => {
-            if (btn.dataset.url && btn.dataset.url !== '#') {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    window.open(btn.dataset.url, '_blank');
-                });
-            }
-        });
+        const btn = contentDiv.querySelector('.teaser-btn');
+        if (btn && btn.dataset.url && btn.dataset.url !== '#') {
+            btn.addEventListener('click', () => {
+                window.open(btn.dataset.url, '_blank');
+            });
+        }
     }
 
-    // Fallback für Stage
+    // Zeigt "No Offers available" in der mittleren Kachel an
+    function showNoOffersMessage() {
+        const imageDiv = document.getElementById("dynamicTeaserImage");
+        imageDiv.style.backgroundImage = "none";
+        imageDiv.style.backgroundColor = "#f0f0f0";
+        
+        const contentDiv = document.getElementById("dynamicTeaserContent");
+        contentDiv.innerHTML = `
+            <div class="no-offers-message">
+                📭 No Offers available
+            </div>
+        `;
+    }
+
+    // Stage Fallback
     function renderStageFallback() {
         const stageContainer = document.getElementById("stageContent");
         stageContainer.innerHTML = `
@@ -660,35 +658,6 @@
                     <h2>DHL SmartDelivery</h2>
                     <p>Bestimmen Sie selbst, wann und wo Ihre Pakete ankommen.</p>
                     <button class="stage-btn">Weiter</button>
-                </div>
-            </div>
-        `;
-    }
-
-    // Fallback für Teaser
-    function renderTeaserFallback() {
-        return `
-            <div class="teaser-grid">
-                <div class="teaser-card" style="background-color: #666;">
-                    <div class="teaser-text-box">
-                        <h3>DHL Ablageort</h3>
-                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus.</p>
-                        <button class="teaser-btn">Mehr erfahren</button>
-                    </div>
-                </div>
-                <div class="teaser-card" style="background-color: #555;">
-                    <div class="teaser-text-box">
-                        <h3>Digitale Benachrichtigung</h3>
-                        <p>Sofort per E-Mail und App erfahren, wo Ihr Paket ist.</p>
-                        <button class="teaser-btn">Mehr erfahren</button>
-                    </div>
-                </div>
-                <div class="teaser-card" style="background-color: #777;">
-                    <div class="teaser-text-box">
-                        <h3>Paketankündigung erhalten</h3>
-                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird.</p>
-                        <button class="teaser-btn">Mehr erfahren</button>
-                    </div>
                 </div>
             </div>
         `;
@@ -703,44 +672,62 @@
         }
         currentSubjectId = subjectId;
 
-        // Stage Bereich: Lade-Modus anzeigen
+        // Stage Bereich: Lade-Modus
         document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage-Inhalte...</div>';
-        // Teaser Bereich: Lade-Modus anzeigen
-        document.getElementById("teaserContent").innerHTML = '<div class="loader">Lade Teaser-Inhalte...</div>';
+        
+        // Mittlere Teaser Kachel: Lade-Modus
+        document.getElementById("dynamicTeaserImage").style.backgroundImage = "none";
+        document.getElementById("dynamicTeaserContent").innerHTML = '<div class="loader">Lade Inhalt...</div>';
 
+        // Stage laden
         try {
-            // Stage laden
-            try {
-                const stageResponse = await fetchPegaContainer(currentSubjectId, "GetStage");
-                const stageResult = extractFirstResult(stageResponse, "GetStage");
-                renderStage(stageResult);
-            } catch (stageError) {
-                console.error("Stage Fehler:", stageError);
+            const stageResponse = await fetchPegaContainer(currentSubjectId, "GetStage");
+            const stageResult = extractFirstResult(stageResponse, "GetStage");
+            renderStage(stageResult);
+        } catch (stageError) {
+            console.error("Stage Fehler:", stageError);
+            if (stageError.message === "No Offers available") {
+                document.getElementById("stageContent").innerHTML = `
+                    <div class="error-message">
+                        📭 No Offers available für Stage
+                    </div>
+                `;
+            } else {
                 document.getElementById("stageContent").innerHTML = `
                     <div class="error-message">
                         ⚠️ Stage Fehler: ${stageError.message}<br>
                         <small>Fallback wird angezeigt.</small>
                     </div>
                 `;
-                renderStageFallback();
             }
+            renderStageFallback();
+        }
 
-            // Teaser laden
-            try {
-                const teaserResponse = await fetchPegaContainer(currentSubjectId, "GetTeaser");
-                renderTeaser(teaserResponse);
-            } catch (teaserError) {
-                console.error("Teaser Fehler:", teaserError);
-                document.getElementById("teaserContent").innerHTML = `
+        // Teaser (mittlere Kachel) laden
+        try {
+            const teaserResponse = await fetchPegaContainer(currentSubjectId, "GetTeaser");
+            
+            if (hasNoOffers(teaserResponse, "GetTeaser")) {
+                showNoOffersMessage();
+            } else {
+                const teaserResult = extractFirstResult(teaserResponse, "GetTeaser");
+                renderMiddleTeaser(teaserResult);
+            }
+        } catch (teaserError) {
+            console.error("Teaser Fehler:", teaserError);
+            if (teaserError.message === "No Offers available") {
+                showNoOffersMessage();
+            } else {
+                const imageDiv = document.getElementById("dynamicTeaserImage");
+                imageDiv.style.backgroundImage = "none";
+                imageDiv.style.backgroundColor = "#f0f0f0";
+                const contentDiv = document.getElementById("dynamicTeaserContent");
+                contentDiv.innerHTML = `
                     <div class="error-message">
-                        ⚠️ Teaser Fehler: ${teaserError.message}<br>
-                        <small>Fallback wird angezeigt.</small>
+                        ⚠️ Fehler: ${teaserError.message}
                     </div>
-                ` + renderTeaserFallback();
+                `;
             }
-
-        } catch (globalError) {
-            console.error("Allgemeiner Fehler:", globalError);
         }
     }
 
@@ -755,11 +742,32 @@
             .replace(/'/g, '&#39;');
     }
 
-    // Event Listener
+    // Event Listener für statische Teaser-Buttons (linke + rechte Kachel)
+    function bindStaticTeaserButtons() {
+        // Linke Kachel Button
+        const leftBtn = document.querySelector('.teaser-grid .teaser-card:first-child .teaser-btn');
+        if (leftBtn) {
+            leftBtn.addEventListener('click', () => {
+                window.open('#', '_blank');
+            });
+        }
+        
+        // Rechte Kachel Button
+        const rightBtn = document.querySelector('.teaser-grid .teaser-card:last-child .teaser-btn');
+        if (rightBtn) {
+            rightBtn.addEventListener('click', () => {
+                window.open('#', '_blank');
+            });
+        }
+    }
+
     document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
     
-    // Seite laden + automatischer erster Call
-    document.addEventListener("DOMContentLoaded", loadAllContent);
+    // Seite laden + erster Call
+    document.addEventListener("DOMContentLoaded", () => {
+        loadAllContent();
+        bindStaticTeaserButtons();
+    });
 </script>
 </body>
 </html>
