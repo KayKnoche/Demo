@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL Paketübersicht</title>
+    <title>DHL - Pakete versenden & empfangen</title>
     <style>
         * {
             margin: 0;
@@ -12,23 +12,22 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.4;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #e9ecef;
+            color: #1a1a1a;
         }
 
-        .container {
-            max-width: 1200px;
+        .wrapper {
+            max-width: 1400px;
             margin: 0 auto;
-            background-color: white;
-            min-height: 100vh;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* Header */
-        .header {
-            background-color: #ffcc00;
-            padding: 15px 20px;
+        /* ========== HEADER ========== */
+        .top-bar {
+            background: #ffcc00;
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -37,253 +36,402 @@
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             color: #d40511;
+            letter-spacing: -1px;
         }
 
-        .nav-links {
+        .main-nav {
             display: flex;
-            gap: 25px;
-            font-size: 14px;
+            gap: 28px;
+            font-size: 15px;
             font-weight: 500;
         }
 
-        .nav-links a {
+        .main-nav a {
             text-decoration: none;
-            color: #333;
+            color: #1a1a1a;
         }
 
-        .user-info {
+        .user-area {
             display: flex;
+            gap: 12px;
             align-items: center;
-            gap: 15px;
-            font-size: 14px;
+            background: rgba(0,0,0,0.05);
+            padding: 5px 15px;
+            border-radius: 30px;
         }
 
-        .package-count {
-            background-color: #d40511;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
+        /* ========== CONTENT ========== */
+        .content {
+            padding: 25px 30px;
         }
 
-        /* Gelbe Benachrichtigungsbox */
-        .notification-box {
-            background-color: #ffefb9;
-            margin: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
+        /* gelbe Box */
+        .alert-box {
+            background: #ffefb9;
+            border-radius: 12px;
+            padding: 18px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .notification-text {
-            font-weight: 500;
-        }
-
-        .notification-button {
-            background-color: #ffcc00;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Sendungsverfolgung */
-        .tracking-section {
-            background-color: white;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-        }
-
-        .tracking-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .tracking-input {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .tracking-input input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .search-btn {
-            background-color: #d40511;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .filter-link {
-            text-align: right;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .archive-note {
-            font-size: 12px;
-            color: #888;
-            margin-top: 10px;
-        }
-
-        /* Empfangen Sie Ihre Pakete */
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 30px 20px 15px 20px;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            margin: 20px;
+            margin-bottom: 30px;
+        }
+        .alert-text strong {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .alert-btn {
+            background: #ffcc00;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
         }
 
-        .service-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
+        /* tracking kasten */
+        .tracking-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
             background: white;
         }
+        .tracking-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        .tracking-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .tracking-row input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        .search-btn {
+            background: #d40511;
+            color: white;
+            border: none;
+            padding: 0 28px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            margin: 12px 0 6px;
+        }
+        .filter-row a {
+            text-decoration: none;
+            color: #555;
+        }
+        .small-note {
+            font-size: 11px;
+            color: #777;
+        }
 
-        .service-card h3 {
-            font-size: 18px;
+        /* einleitung */
+        .section-lead {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 30px 0 8px;
+        }
+        .sub-lead {
+            font-size: 14px;
+            margin-bottom: 25px;
+            color: #444;
+        }
+        .sub-lead a {
+            color: #d40511;
+            text-decoration: none;
+        }
+
+        /* drei karten */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 20px 0 35px;
+        }
+        .card {
+            flex: 1;
+            min-width: 220px;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fff;
+        }
+        .card h3 {
+            font-size: 20px;
             margin-bottom: 10px;
         }
-
-        .service-card p {
+        .card p {
             font-size: 14px;
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            color: #5a5a5a;
+            margin-bottom: 16px;
+            line-height: 1.4;
         }
-
-        .service-link {
+        .card a {
             color: #d40511;
             text-decoration: none;
             font-weight: 500;
-            font-size: 14px;
         }
 
-        /* Footer Banner */
-        .footer-banner {
-            background-color: #ffcc00;
-            margin: 30px 20px 20px 20px;
-            padding: 20px;
-            border-radius: 8px;
+        /* gelber banner */
+        .yellow-banner {
+            background: #ffcc00;
+            border-radius: 12px;
             text-align: center;
-            font-weight: bold;
-            font-size: 18px;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 15px 0 35px;
         }
 
-        @media (max-width: 768px) {
-            .header {
+        /* ====== PORTO BEREICH (Tabelle) ====== */
+        .porto-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin: 30px 0 50px;
+            border-top: 1px solid #eee;
+            padding-top: 30px;
+        }
+        .porto-form {
+            flex: 1.2;
+        }
+        .porto-table {
+            flex: 1;
+            background: #fafafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        .porto-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .porto-table td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #ddd;
+        }
+        .porto-price {
+            font-weight: bold;
+            font-size: 20px;
+            color: #d40511;
+        }
+        .btn-kaufen {
+            background: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 30px;
+            margin-top: 15px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .porto-link {
+            margin-top: 12px;
+            display: inline-block;
+            color: #d40511;
+            text-decoration: none;
+        }
+
+        /* footer links */
+        .footer-links {
+            background: #f2f2f2;
+            padding: 35px 30px 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+            border-top: 1px solid #ddd;
+        }
+        .footer-col {
+            flex: 1;
+            min-width: 140px;
+        }
+        .footer-col h4 {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .footer-col a {
+            display: block;
+            color: #444;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .copyright {
+            background: #f2f2f2;
+            text-align: center;
+            font-size: 11px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            color: #666;
+        }
+
+        @media (max-width: 800px) {
+            .content {
+                padding: 15px;
+            }
+            .top-bar {
                 flex-direction: column;
                 text-align: center;
             }
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .notification-box {
+            .cards {
                 flex-direction: column;
-                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">DHL</div>
-            <div class="nav-links">
-                <a href="#">Pakete versenden</a>
-                <a href="#">Pakete empfangen</a>
-                <a href="#">Hilfe und Kontakt</a>
-            </div>
-            <div class="user-info">
-                <span>Kay Knoche</span>
-                <span class="package-count">55 Pakete</span>
-            </div>
+<div class="wrapper">
+    <!-- Header -->
+    <div class="top-bar">
+        <div class="logo">DHH</div>
+        <div class="main-nav">
+            <a href="#">Pakete versenden</a>
+            <a href="#">Pakete empfangen</a>
+            <a href="#">Hilfe & Kontakt</a>
         </div>
+        <div class="user-area">
+            <span>Kay Knoche</span>
+            <span style="background:#d40511; color:white; padding:2px 12px; border-radius:30px;">55 Pakete</span>
+        </div>
+    </div>
 
-        <!-- Digitale Benachrichtigung -->
-        <div class="notification-box">
-            <div class="notification-text">
-                <strong>📱 DIGITALE BENACHRICHTIGUNG DIREKT AUFS HANDY</strong><br>
+    <div class="content">
+        <!-- gelbe Info Box -->
+        <div class="alert-box">
+            <div class="alert-text">
+                <strong>🔔 DIGITALE BENACHRICHTIGUNG DIREKT AUFS HANDY</strong>
                 Sofort per E-Mail und App erfahren, wo Ihr Paket hinterlegt wurde.
             </div>
-            <button class="notification-button">Weiter</button>
+            <button class="alert-btn">Weiter</button>
         </div>
 
         <!-- Sendung verfolgen -->
-        <div class="tracking-section">
+        <div class="tracking-card">
             <div class="tracking-title">Sendung verfolgen</div>
-            <div class="tracking-input">
+            <div class="tracking-row">
                 <input type="text" placeholder="Sendungsnummer">
-                <button class="search-btn">Q Suchen</button>
+                <button class="search-btn">Suchen</button>
             </div>
-            <div class="filter-link">
-                <a href="#" style="color:#666; text-decoration:none;">Filtern</a> | <a href="#" style="color:#666; text-decoration:none;">Archiv einblenden</a>
+            <div class="filter-row">
+                <a href="#">Filtern</a>
+                <a href="#">Archiv einblenden</a>
             </div>
-            <div class="archive-note">
-                Nach 21 Tagen werden Sendungen im Archiv gespeichert, für die ggf. eine längere Beauskunft möglich ist.
-            </div>
+            <div class="small-note">Nach 21 Tagen werden Sendungen im Archiv gespeichert, für die ggf. eine längere Beauskunftung möglich ist.</div>
         </div>
 
         <!-- Empfangen Sie Ihre Pakete noch bequemer -->
-        <div class="section-title">Empfangen Sie Ihre Pakete noch bequemer</div>
-        <div style="margin: 0 20px 10px 20px; font-size: 14px; color: #555;">
-            Unter Meine Daten & Services können Sie die Einstellungen für Ihren Paketempfang jederzeit ändern.
+        <div class="section-lead">Empfangen Sie Ihre Pakete noch bequemer</div>
+        <div class="sub-lead">
+            Unter <a href="#">Meine Daten & Services</a> können Sie die Einstellungen für Ihren Paketempfang jederzeit ändern.
         </div>
 
-        <!-- Service Karten -->
-        <div class="services-grid">
-            <div class="service-card">
-                <h3>DHL Ablageort</h3>
-                <p>Wählen Sie einen Ablageort auf Ihrem Großstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
-                <a href="#" class="service-link">Mehr erfahren &gt;</a>
+        <!-- Drei Services -->
+        <div class="cards">
+            <div class="card">
+                <h3>DHH Ablageort</h3>
+                <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
+                <a href="#">Mehr erfahren &gt;</a>
             </div>
-            <div class="service-card">
+            <div class="card">
                 <h3>Digitale Benachrichtigung</h3>
                 <p>Sofort per E-Mail und App erfahren, wo Sie Ihr zugestelltes Paket abholen können.</p>
-                <a href="#" class="service-link">Mehr erfahren &gt;</a>
+                <a href="#">Mehr erfahren &gt;</a>
             </div>
-            <div class="service-card">
+            <div class="card">
                 <h3>Paketankündigung erhalten</h3>
                 <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
-                <a href="#" class="service-link">Mehr erfahren &gt;</a>
+                <a href="#">Mehr erfahren &gt;</a>
             </div>
         </div>
 
-        <!-- Footer Banner -->
-        <div class="footer-banner">
-            Schon ab 4,19 EUR deutschlandweit versenden
+        <!-- gelber Banner "Schon ab 4,19 EUR" -->
+        <div class="yellow-banner">
+            ✨ Schon ab 4,19 EUR deutschlandweit versenden
+        </div>
+
+        <!-- Porto berechnen + Tabelle (exakt aus dem Bild) -->
+        <div class="porto-section">
+            <div class="porto-form">
+                <h3 style="margin-bottom: 20px; font-size: 22px;">Porto berechnen</h3>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div><strong>Länderanzahl:</strong> Deutschland</div>
+                    <div><strong>Art:</strong> Karton</div>
+                    <div><strong>Gewicht:</strong> bis 2 kg</div>
+                </div>
+            </div>
+            <div class="porto-table">
+                <table>
+                    <tr><td><strong>Päckchen</strong></td><td class="porto-price">€</td></tr>
+                    <tr><td>Laufzeit in der Regel 1-2 Werktage</td><td style="font-weight: bold;">4,19 €</td></tr>
+                    <tr><td>✕ Haftung</td><td></td></tr>
+                    <tr><td>✕ Sendungsverfolgung</td><td></td></tr>
+                </table>
+                <a href="#" class="porto-link">Eigenschaften ändern →</a>
+                <button class="btn-kaufen">Jetzt kaufen (4,19 €)</button>
+            </div>
         </div>
     </div>
+
+    <!-- Footer (Privatkunden / Geschäftskunden / Über uns / Social) -->
+    <div class="footer-links">
+        <div class="footer-col">
+            <h4>Privatkunden</h4>
+            <a href="#">Preise</a>
+            <a href="#">Versenden</a>
+            <a href="#">Empfangen</a>
+            <a href="#">DHL Kundenkonto</a>
+            <a href="#">Hilfe & Kontakt</a>
+            <a href="#">Post & DHL App</a>
+        </div>
+        <div class="footer-col">
+            <h4>Geschäftskunden</h4>
+            <a href="#">Paket</a>
+            <a href="#">Express</a>
+            <a href="#">Logistik</a>
+            <a href="#">Kontakt</a>
+            <a href="#">Kunde werden</a>
+            <a href="#">DHL.com</a>
+        </div>
+        <div class="footer-col">
+            <h4>Über uns</h4>
+            <a href="#">DHL Group</a>
+            <a href="#">Karriere</a>
+            <a href="#">Presse</a>
+            <a href="#">Investoren</a>
+            <a href="#">Nachhaltigkeit</a>
+        </div>
+        <div class="footer-col">
+            <h4>Social</h4>
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">Twitter</a>
+            <a href="#">LinkedIn</a>
+        </div>
+    </div>
+    <div class="copyright">
+        © 2025 DHL – Alle Rechte vorbehalten.
+    </div>
+</div>
 </body>
 </html>
