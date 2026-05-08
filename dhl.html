@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL - Pega CDH RealTime Container</title>
+    <title>DHL - Pega CDH Debug (ClickThroughURL anzeigen)</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,7 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* ========== HEADER ========== */
+        /* Header */
         .top-bar {
             background: #ffcc00;
             padding: 12px 30px;
@@ -60,7 +60,6 @@
             color: #1a1a1a;
         }
 
-        /* SubjectID Input Bereich */
         .subjectid-area {
             display: flex;
             gap: 10px;
@@ -94,16 +93,35 @@
             font-weight: bold;
         }
 
-        .subjectid-area button:hover {
-            background: #a0040e;
-        }
-
-        /* ========== CONTENT ========== */
         .content {
             padding: 25px 30px;
         }
 
-        /* ===== STAGE BEREICH (dynamisch, rot umrandet) ===== */
+        /* DEBUG BOX */
+        .debug-box {
+            background: #1e1e1e;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .debug-box h3 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+        .debug-url {
+            background: #333;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+
+        /* Stage Bereich */
         .stage-container {
             border: 3px solid #ff0000;
             border-radius: 12px;
@@ -141,7 +159,6 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.45);
-            border-radius: 0 0 10px 10px;
         }
 
         .stage-text-box {
@@ -176,15 +193,8 @@
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
-            transition: transform 0.2s;
         }
 
-        .stage-btn:hover {
-            transform: scale(1.02);
-            background: #e6b800;
-        }
-
-        /* tracking kasten */
         .tracking-card {
             border: 1px solid #ddd;
             border-radius: 12px;
@@ -200,7 +210,6 @@
         .tracking-row {
             display: flex;
             gap: 12px;
-            margin-bottom: 12px;
             flex-wrap: wrap;
         }
         .tracking-row input {
@@ -220,7 +229,6 @@
             cursor: pointer;
         }
 
-        /* ===== TEASER BEREICH (3 Kacheln, rot umrandet) ===== */
         .teaser-container {
             border: 3px solid #ff0000;
             border-radius: 12px;
@@ -252,12 +260,6 @@
             border: 1px solid #e0e0e0;
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .teaser-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
         .teaser-card-image {
@@ -297,23 +299,8 @@
             cursor: pointer;
             font-size: 13px;
             text-decoration: none;
-            transition: background 0.2s;
         }
 
-        .teaser-btn:hover {
-            background: #e6b800;
-        }
-
-        .no-offers-message {
-            background: #fff3cd;
-            color: #856404;
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
-        /* gelber banner */
         .yellow-banner {
             background: #ffcc00;
             border-radius: 12px;
@@ -324,7 +311,6 @@
             margin: 15px 0 35px;
         }
 
-        /* footer */
         .footer-links {
             background: #f2f2f2;
             padding: 35px 30px 25px;
@@ -332,7 +318,6 @@
             flex-wrap: wrap;
             justify-content: space-between;
             gap: 30px;
-            border-top: 1px solid #ddd;
         }
         .footer-col {
             flex: 1;
@@ -358,7 +343,6 @@
             color: #666;
         }
 
-        /* Loading & Error */
         .loader {
             text-align: center;
             padding: 40px;
@@ -374,31 +358,27 @@
             text-align: center;
         }
 
+        .no-offers-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
         @media (max-width: 800px) {
-            .content {
-                padding: 15px;
-            }
-            .top-bar {
-                flex-direction: column;
-                text-align: center;
-            }
-            .teaser-grid {
-                flex-direction: column;
-            }
-            .stage-text-box {
-                max-width: 100%;
-            }
-            .stage-content {
-                padding: 20px;
-            }
+            .content { padding: 15px; }
+            .top-bar { flex-direction: column; text-align: center; }
+            .teaser-grid { flex-direction: column; }
+            .stage-text-box { max-width: 100%; }
         }
     </style>
 </head>
 <body>
 <div class="wrapper">
-    <!-- Header mit SubjectID Input -->
     <div class="top-bar">
-        <div class="logo">DHL <span>powered by Pega CDH</span></div>
+        <div class="logo">DHL <span>🔍 DEBUG MODE</span></div>
         <div class="main-nav">
             <a href="#">Pakete versenden</a>
             <a href="#">Pakete empfangen</a>
@@ -406,21 +386,26 @@
         </div>
         <div class="subjectid-area">
             <label>SubjectID:</label>
-            <input type="text" id="subjectIdInput" placeholder="z.B. 33782845" value="33782845">
+            <input type="text" id="subjectIdInput" placeholder="SubjectID" value="33782845">
             <button id="loadContentBtn">Aktualisieren</button>
         </div>
     </div>
 
     <div class="content">
-        <!-- ===== DYNAMISCHER STAGE BEREICH ===== -->
+        <!-- 📍 DEBUG ANZEIGE -->
+        <div class="debug-box" id="debugBox">
+            <h3>🔍 DEBUG: ClickThroughURL aus Pega</h3>
+            <div id="debugStageUrl">⏳ Stage: wird geladen...</div>
+            <div id="debugTeaserUrl" style="margin-top: 8px;">⏳ Teaser: wird geladen...</div>
+        </div>
+
         <div class="stage-container">
-            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH)</div>
+            <div class="stage-label">📢 STAGE</div>
             <div class="stage-content" id="stageContent">
-                <div class="loader">Lade Stage-Inhalte von Pega CDH...</div>
+                <div class="loader">Lade Stage-Inhalte...</div>
             </div>
         </div>
 
-        <!-- Tracking (statisch) -->
         <div class="tracking-card">
             <div class="tracking-title">Sendung verfolgen</div>
             <div class="tracking-row">
@@ -429,21 +414,18 @@
             </div>
         </div>
 
-        <!-- ===== TEASER BEREICH (3 Kacheln) ===== -->
         <div class="teaser-container">
-            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH - mittlere Kachel)</div>
-            <div class="teaser-grid" id="teaserGrid">
-                <!-- Linke Kachel: statisch (DHL Ablageort) -->
+            <div class="teaser-label">🎯 TEASER</div>
+            <div class="teaser-grid">
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-packstation-dhl-de.png');"></div>
                     <div class="teaser-card-content">
                         <h3>DHL Ablageort</h3>
-                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
-                        <a href="#" class="teaser-btn static-left" target="_self">Mehr erfahren</a>
+                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus.</p>
+                        <a href="#" class="teaser-btn">Mehr erfahren</a>
                     </div>
                 </div>
 
-                <!-- MITTLERE KACHEL: dynamisch via Pega GetTeaser -->
                 <div class="teaser-card" id="dynamicTeaserCard">
                     <div class="teaser-card-image" id="dynamicTeaserImage" style="background-color: #f0f0f0;"></div>
                     <div class="teaser-card-content" id="dynamicTeaserContent">
@@ -451,13 +433,12 @@
                     </div>
                 </div>
 
-                <!-- Rechte Kachel: statisch (Paketankündigung erhalten) mit deinem Bild -->
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://kayknoche.github.io/Demo/Bild.jpg');"></div>
                     <div class="teaser-card-content">
                         <h3>Paketankündigung erhalten</h3>
-                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
-                        <a href="#" class="teaser-btn static-right" target="_self">Mehr erfahren</a>
+                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird.</p>
+                        <a href="#" class="teaser-btn">Mehr erfahren</a>
                     </div>
                 </div>
             </div>
@@ -468,7 +449,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer-links">
         <div class="footer-col">
             <h4>Privatkunden</h4>
@@ -504,19 +484,12 @@
             <a href="#">LinkedIn</a>
         </div>
     </div>
-    <div class="copyright">
-        © 2025 DHL – Alle Rechte vorbehalten.
-    </div>
+    <div class="copyright">© 2025 DHL – Debug Version</div>
 </div>
 
 <script>
-    // Pega CDH Endpoint
     const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
 
-    // Aktuelle SubjectID
-    let currentSubjectId = "33782845";
-
-    // Funktion: Pega Request für einen bestimmten Container
     async function fetchPegaContainer(subjectId, containerName) {
         const payload = {
             "SubjectID": subjectId,
@@ -527,228 +500,109 @@
             "CurrentPage": "Download",
             "AppID": "MEKK"
         };
-
         console.log(`Request ${containerName}:`, payload);
-
         const response = await fetch(PEGA_ENDPOINT, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
             body: JSON.stringify(payload)
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         console.log(`Response ${containerName}:`, data);
         return data;
     }
 
-    // Prüft ob "No Offers available" vorliegt
-    function hasNoOffers(response, containerName) {
-        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
-        if (!container) return true;
-        
-        if (container.Status === "No Offers available") return true;
-        if (!container.RankedResults || container.RankedResults.length === 0) return true;
-        
-        return false;
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // Extrahiert das erste RankedResult aus der Response
-    function extractFirstResult(response, containerName) {
-        if (response.Status !== "OK") {
-            throw new Error(`Pega Status: ${response.Status}`);
-        }
-
-        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
-        if (!container) {
-            throw new Error(`Container ${containerName} nicht gefunden`);
-        }
-
-        if (container.Status === "No Offers available" || !container.RankedResults || container.RankedResults.length === 0) {
-            throw new Error("No Offers available");
-        }
-
-        return container.RankedResults[0];
-    }
-
-    // Rendert Stage-Bereich mit echten <a>-Links
-    function renderStage(result) {
-        const stageContainer = document.getElementById("stageContent");
-        const imageUrl = result.ImageURL || "";
-        const title = result.ShortDescription || result.Label || "Ihr persönliches Angebot";
-        const benefits = result.Benefits || "";
-        const clickThroughUrl = result.ClickThroughURL || "#";
-
-        const bgImageStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
-
-        stageContainer.innerHTML = `
-            <div class="stage-content" style="${bgImageStyle}">
-                <div class="stage-text-box">
-                    <h2>${escapeHtml(title)}</h2>
-                    <p>${escapeHtml(benefits)}</p>
-                    <a href="${escapeHtml(clickThroughUrl)}" class="stage-btn" target="_self">Weiter</a>
-                </div>
-            </div>
-        `;
-    }
-
-    // Zeigt "No Offers available" im Stage-Bereich an
-    function showStageNoOffersMessage() {
-        const stageContainer = document.getElementById("stageContent");
-        stageContainer.innerHTML = `
-            <div class="stage-content" style="background-color: #f5f5f5; min-height: 200px;">
-                <div class="stage-text-box" style="background: rgba(0,0,0,0.7); width: 100%; text-align: center;">
-                    <h2>📭 No Offers available</h2>
-                    <p>Für diese SubjectID liegt aktuell kein Stage-Angebot vor.</p>
-                </div>
-            </div>
-        `;
-    }
-
-    // Rendert die mittlere Teaser-Kachel mit echten <a>-Links
-    function renderMiddleTeaser(result) {
-        const imageUrl = result.ImageURL || "";
-        const title = result.ShortDescription || result.Label || "Service-Tipp";
-        const benefits = result.Benefits || "";
-        const clickThroughUrl = result.ClickThroughURL || "#";
-
-        const imageDiv = document.getElementById("dynamicTeaserImage");
-        if (imageUrl) {
-            imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
-            imageDiv.style.backgroundSize = "cover";
-            imageDiv.style.backgroundPosition = "center";
-        } else {
-            imageDiv.style.backgroundColor = "#f0f0f0";
-        }
-
-        const contentDiv = document.getElementById("dynamicTeaserContent");
-        contentDiv.innerHTML = `
-            <h3>${escapeHtml(title)}</h3>
-            <p>${escapeHtml(benefits)}</p>
-            <a href="${escapeHtml(clickThroughUrl)}" class="teaser-btn" target="_self">Mehr erfahren</a>
-        `;
-    }
-
-    // Zeigt "No Offers available" in der mittleren Kachel an
-    function showNoOffersMessage() {
-        const imageDiv = document.getElementById("dynamicTeaserImage");
-        imageDiv.style.backgroundImage = "none";
-        imageDiv.style.backgroundColor = "#f0f0f0";
-        
-        const contentDiv = document.getElementById("dynamicTeaserContent");
-        contentDiv.innerHTML = `
-            <div class="no-offers-message">
-                📭 No Offers available
-            </div>
-        `;
-    }
-
-    // Stage Fallback (wenn Fehler, aber nicht "No Offers")
-    function renderStageFallback() {
-        const stageContainer = document.getElementById("stageContent");
-        stageContainer.innerHTML = `
-            <div class="stage-content" style="background-color: #333;">
-                <div class="stage-text-box">
-                    <h2>DHL SmartDelivery</h2>
-                    <p>Bestimmen Sie selbst, wann und wo Ihre Pakete ankommen.</p>
-                    <a href="#" class="stage-btn" target="_self">Weiter</a>
-                </div>
-            </div>
-        `;
-    }
-
-    // Hauptfunktion: Lädt Stage und Teaser
     async function loadAllContent() {
         const subjectId = document.getElementById("subjectIdInput").value.trim();
-        if (!subjectId) {
-            alert("Bitte eine SubjectID eingeben");
-            return;
-        }
-        currentSubjectId = subjectId;
+        if (!subjectId) { alert("Bitte SubjectID eingeben"); return; }
 
-        // Stage Bereich: Lade-Modus
-        document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage-Inhalte...</div>';
-        
-        // Mittlere Teaser Kachel: Lade-Modus
+        // Debug zurücksetzen
+        document.getElementById("debugStageUrl").innerHTML = "⏳ Stage: wird geladen...";
+        document.getElementById("debugTeaserUrl").innerHTML = "⏳ Teaser: wird geladen...";
+        document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage...</div>';
         document.getElementById("dynamicTeaserImage").style.backgroundImage = "none";
         document.getElementById("dynamicTeaserContent").innerHTML = '<div class="loader">Lade Inhalt...</div>';
 
-        // Stage laden
+        // STAGE laden
         try {
-            const stageResponse = await fetchPegaContainer(currentSubjectId, "GetStage");
+            const stageResponse = await fetchPegaContainer(subjectId, "GetStage");
+            const container = stageResponse.ContainerList?.find(c => c.ContainerName === "GetStage");
             
-            if (hasNoOffers(stageResponse, "GetStage")) {
-                showStageNoOffersMessage();
+            if (!container || container.Status === "No Offers available" || !container.RankedResults?.length) {
+                document.getElementById("debugStageUrl").innerHTML = "📭 Stage: No Offers available";
+                document.getElementById("stageContent").innerHTML = `<div class="stage-content" style="background-color:#333;"><div class="stage-text-box"><h2>📭 No Offers available</h2><p>Kein Stage-Angebot für diese SubjectID.</p></div></div>`;
             } else {
-                const stageResult = extractFirstResult(stageResponse, "GetStage");
-                renderStage(stageResult);
-            }
-        } catch (stageError) {
-            console.error("Stage Fehler:", stageError);
-            if (stageError.message === "No Offers available") {
-                showStageNoOffersMessage();
-            } else {
+                const result = container.RankedResults[0];
+                const clickThroughUrl = result.ClickThroughURL || "❌ KEINE URL (leer/null)";
+                const imageUrl = result.ImageURL || "";
+                const title = result.ShortDescription || result.Label || "Angebot";
+                const benefits = result.Benefits || "";
+                
+                // 🔍 DEBUG ANZEIGE
+                document.getElementById("debugStageUrl").innerHTML = `🔗 Stage ClickThroughURL: <span class="debug-url" style="display:block; background:#333; padding:5px; margin-top:4px; word-break:break-all;">${escapeHtml(clickThroughUrl)}</span>`;
+                
+                const bgStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
                 document.getElementById("stageContent").innerHTML = `
-                    <div class="error-message">
-                        ⚠️ Stage Fehler: ${stageError.message}<br>
-                        <small>Fallback wird angezeigt.</small>
+                    <div class="stage-content" style="${bgStyle}">
+                        <div class="stage-text-box">
+                            <h2>${escapeHtml(title)}</h2>
+                            <p>${escapeHtml(benefits)}</p>
+                            <a href="${escapeHtml(clickThroughUrl)}" class="stage-btn" target="_self">Weiter</a>
+                        </div>
                     </div>
                 `;
-                renderStageFallback();
             }
+        } catch (e) {
+            document.getElementById("debugStageUrl").innerHTML = `❌ Stage Fehler: ${e.message}`;
+            document.getElementById("stageContent").innerHTML = `<div class="error-message">Fehler: ${e.message}</div>`;
         }
 
-        // Teaser (mittlere Kachel) laden
+        // TEASER (mittlere Kachel) laden
         try {
-            const teaserResponse = await fetchPegaContainer(currentSubjectId, "GetTeaser");
+            const teaserResponse = await fetchPegaContainer(subjectId, "GetTeaser");
+            const container = teaserResponse.ContainerList?.find(c => c.ContainerName === "GetTeaser");
             
-            if (hasNoOffers(teaserResponse, "GetTeaser")) {
-                showNoOffersMessage();
+            if (!container || container.Status === "No Offers available" || !container.RankedResults?.length) {
+                document.getElementById("debugTeaserUrl").innerHTML = "📭 Teaser: No Offers available";
+                document.getElementById("dynamicTeaserImage").style.backgroundColor = "#f0f0f0";
+                document.getElementById("dynamicTeaserContent").innerHTML = `<div class="no-offers-message">📭 No Offers available</div>`;
             } else {
-                const teaserResult = extractFirstResult(teaserResponse, "GetTeaser");
-                renderMiddleTeaser(teaserResult);
-            }
-        } catch (teaserError) {
-            console.error("Teaser Fehler:", teaserError);
-            if (teaserError.message === "No Offers available") {
-                showNoOffersMessage();
-            } else {
+                const result = container.RankedResults[0];
+                const clickThroughUrl = result.ClickThroughURL || "❌ KEINE URL (leer/null)";
+                const imageUrl = result.ImageURL || "";
+                const title = result.ShortDescription || result.Label || "Service-Tipp";
+                const benefits = result.Benefits || "";
+                
+                // 🔍 DEBUG ANZEIGE
+                document.getElementById("debugTeaserUrl").innerHTML = `🔗 Teaser ClickThroughURL: <span class="debug-url" style="display:block; background:#333; padding:5px; margin-top:4px; word-break:break-all;">${escapeHtml(clickThroughUrl)}</span>`;
+                
                 const imageDiv = document.getElementById("dynamicTeaserImage");
-                imageDiv.style.backgroundImage = "none";
-                imageDiv.style.backgroundColor = "#f0f0f0";
-                const contentDiv = document.getElementById("dynamicTeaserContent");
-                contentDiv.innerHTML = `
-                    <div class="error-message">
-                        ⚠️ Fehler: ${teaserError.message}
-                    </div>
+                if (imageUrl) {
+                    imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
+                    imageDiv.style.backgroundSize = "cover";
+                } else {
+                    imageDiv.style.backgroundColor = "#f0f0f0";
+                }
+                document.getElementById("dynamicTeaserContent").innerHTML = `
+                    <h3>${escapeHtml(title)}</h3>
+                    <p>${escapeHtml(benefits)}</p>
+                    <a href="${escapeHtml(clickThroughUrl)}" class="teaser-btn" target="_self">Mehr erfahren</a>
                 `;
             }
+        } catch (e) {
+            document.getElementById("debugTeaserUrl").innerHTML = `❌ Teaser Fehler: ${e.message}`;
+            document.getElementById("dynamicTeaserImage").style.backgroundColor = "#f0f0f0";
+            document.getElementById("dynamicTeaserContent").innerHTML = `<div class="error-message">Fehler: ${e.message}</div>`;
         }
-    }
-
-    // Escape HTML
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
     }
 
     document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
-    
-    // Seite laden + erster Call
-    document.addEventListener("DOMContentLoaded", () => {
-        loadAllContent();
-    });
+    document.addEventListener("DOMContentLoaded", loadAllContent);
 </script>
 </body>
 </html>
