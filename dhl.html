@@ -429,17 +429,17 @@
         <div class="teaser-container">
             <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH - mittlere Kachel)</div>
             <div class="teaser-grid" id="teaserGrid">
-                <!-- Linke Kachel: statisch -->
+                <!-- Linke Kachel: statisch (DHL Ablageort) -->
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-packstation-dhl-de.png');"></div>
                     <div class="teaser-card-content">
                         <h3>DHL Ablageort</h3>
                         <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
-                        <button class="teaser-btn">Mehr erfahren</button>
+                        <button class="teaser-btn static-left">Mehr erfahren</button>
                     </div>
                 </div>
 
-                <!-- MITTLERE Kachel: dynamisch via Pega GetTeaser -->
+                <!-- MITTLERE KACHEL: dynamisch via Pega GetTeaser -->
                 <div class="teaser-card" id="dynamicTeaserCard">
                     <div class="teaser-card-image" id="dynamicTeaserImage" style="background-color: #f0f0f0;"></div>
                     <div class="teaser-card-content" id="dynamicTeaserContent">
@@ -447,13 +447,13 @@
                     </div>
                 </div>
 
-                <!-- Rechte Kachel: statisch -->
+                <!-- Rechte Kachel: statisch (Paketankündigung erhalten) -->
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-ankuendigung-dhl-de.png');"></div>
                     <div class="teaser-card-content">
                         <h3>Paketankündigung erhalten</h3>
                         <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
-                        <button class="teaser-btn">Mehr erfahren</button>
+                        <button class="teaser-btn static-right">Mehr erfahren</button>
                     </div>
                 </div>
             </div>
@@ -549,7 +549,6 @@
         const container = response.ContainerList?.find(c => c.ContainerName === containerName);
         if (!container) return true;
         
-        // Prüfe auf "No Offers" Status oder leere RankedResults
         if (container.Status === "No Offers available") return true;
         if (!container.RankedResults || container.RankedResults.length === 0) return true;
         
@@ -574,7 +573,7 @@
         return container.RankedResults[0];
     }
 
-    // Rendert Stage-Bereich
+    // Rendert Stage-Bereich (öffnet im gleichen Tab)
     function renderStage(result) {
         const stageContainer = document.getElementById("stageContent");
         const imageUrl = result.ImageURL || "";
@@ -597,19 +596,32 @@
         const btn = stageContainer.querySelector('.stage-btn');
         if (btn && btn.dataset.url && btn.dataset.url !== '#') {
             btn.addEventListener('click', () => {
-                window.open(btn.dataset.url, '_blank');
+                // Im gleichen Tab öffnen
+                window.location.href = btn.dataset.url;
             });
         }
     }
 
-    // Rendert die mittlere Teaser-Kachel
+    // Zeigt "No Offers available" im Stage-Bereich an
+    function showStageNoOffersMessage() {
+        const stageContainer = document.getElementById("stageContent");
+        stageContainer.innerHTML = `
+            <div class="stage-content" style="background-color: #f5f5f5; min-height: 200px;">
+                <div class="stage-text-box" style="background: rgba(0,0,0,0.7); width: 100%; text-align: center;">
+                    <h2>📭 No Offers available</h2>
+                    <p>Für diese SubjectID liegt aktuell kein Stage-Angebot vor.</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Rendert die mittlere Teaser-Kachel (öffnet im gleichen Tab)
     function renderMiddleTeaser(result) {
         const imageUrl = result.ImageURL || "";
         const title = result.ShortDescription || result.Label || "Service-Tipp";
         const benefits = result.Benefits || "";
         const clickThroughUrl = result.ClickThroughURL || "#";
 
-        // Bildbereich
         const imageDiv = document.getElementById("dynamicTeaserImage");
         if (imageUrl) {
             imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
@@ -619,7 +631,6 @@
             imageDiv.style.backgroundColor = "#f0f0f0";
         }
 
-        // Content Bereich
         const contentDiv = document.getElementById("dynamicTeaserContent");
         contentDiv.innerHTML = `
             <h3>${escapeHtml(title)}</h3>
@@ -630,7 +641,8 @@
         const btn = contentDiv.querySelector('.teaser-btn');
         if (btn && btn.dataset.url && btn.dataset.url !== '#') {
             btn.addEventListener('click', () => {
-                window.open(btn.dataset.url, '_blank');
+                // Im gleichen Tab öffnen
+                window.location.href = btn.dataset.url;
             });
         }
     }
@@ -649,7 +661,7 @@
         `;
     }
 
-    // Stage Fallback
+    // Stage Fallback (wenn Fehler, aber nicht "No Offers")
     function renderStageFallback() {
         const stageContainer = document.getElementById("stageContent");
         stageContainer.innerHTML = `
@@ -682,16 +694,17 @@
         // Stage laden
         try {
             const stageResponse = await fetchPegaContainer(currentSubjectId, "GetStage");
-            const stageResult = extractFirstResult(stageResponse, "GetStage");
-            renderStage(stageResult);
+            
+            if (hasNoOffers(stageResponse, "GetStage")) {
+                showStageNoOffersMessage();
+            } else {
+                const stageResult = extractFirstResult(stageResponse, "GetStage");
+                renderStage(stageResult);
+            }
         } catch (stageError) {
             console.error("Stage Fehler:", stageError);
             if (stageError.message === "No Offers available") {
-                document.getElementById("stageContent").innerHTML = `
-                    <div class="error-message">
-                        📭 No Offers available für Stage
-                    </div>
-                `;
+                showStageNoOffersMessage();
             } else {
                 document.getElementById("stageContent").innerHTML = `
                     <div class="error-message">
@@ -699,8 +712,8 @@
                         <small>Fallback wird angezeigt.</small>
                     </div>
                 `;
+                renderStageFallback();
             }
-            renderStageFallback();
         }
 
         // Teaser (mittlere Kachel) laden
@@ -742,13 +755,13 @@
             .replace(/'/g, '&#39;');
     }
 
-    // Event Listener für statische Teaser-Buttons (linke + rechte Kachel)
+    // Event Listener für statische Teaser-Buttons (linke + rechte Kachel) - gleicher Tab
     function bindStaticTeaserButtons() {
         // Linke Kachel Button
         const leftBtn = document.querySelector('.teaser-grid .teaser-card:first-child .teaser-btn');
         if (leftBtn) {
             leftBtn.addEventListener('click', () => {
-                window.open('#', '_blank');
+                window.location.href = '#';
             });
         }
         
@@ -756,7 +769,7 @@
         const rightBtn = document.querySelector('.teaser-grid .teaser-card:last-child .teaser-btn');
         if (rightBtn) {
             rightBtn.addEventListener('click', () => {
-                window.open('#', '_blank');
+                window.location.href = '#';
             });
         }
     }
