@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL - Pega CDH Debug (ClickThroughURL anzeigen)</title>
+    <title>DHL - Pega CDH RealTime Container</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,6 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* Header */
         .top-bar {
             background: #ffcc00;
             padding: 12px 30px;
@@ -93,35 +92,14 @@
             font-weight: bold;
         }
 
+        .subjectid-area button:hover {
+            background: #a0040e;
+        }
+
         .content {
             padding: 25px 30px;
         }
 
-        /* DEBUG BOX */
-        .debug-box {
-            background: #1e1e1e;
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        .debug-box h3 {
-            color: #ffcc00;
-            margin-bottom: 10px;
-        }
-        .debug-url {
-            background: #333;
-            padding: 8px;
-            border-radius: 4px;
-            margin: 8px 0;
-        }
-
-        /* Stage Bereich */
         .stage-container {
             border: 3px solid #ff0000;
             border-radius: 12px;
@@ -193,6 +171,12 @@
             font-size: 16px;
             cursor: pointer;
             text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .stage-btn:hover {
+            transform: scale(1.02);
+            background: #e6b800;
         }
 
         .tracking-card {
@@ -202,16 +186,19 @@
             margin-bottom: 30px;
             background: white;
         }
+
         .tracking-title {
             font-size: 22px;
             font-weight: 700;
             margin-bottom: 15px;
         }
+
         .tracking-row {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
         }
+
         .tracking-row input {
             flex: 1;
             padding: 12px;
@@ -219,6 +206,7 @@
             border-radius: 6px;
             font-size: 15px;
         }
+
         .search-btn {
             background: #d40511;
             color: white;
@@ -260,6 +248,12 @@
             border: 1px solid #e0e0e0;
             border-radius: 12px;
             overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .teaser-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
         .teaser-card-image {
@@ -299,6 +293,20 @@
             cursor: pointer;
             font-size: 13px;
             text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .teaser-btn:hover {
+            background: #e6b800;
+        }
+
+        .no-offers-message {
+            background: #fff3cd;
+            color: #856404;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
         }
 
         .yellow-banner {
@@ -319,14 +327,17 @@
             justify-content: space-between;
             gap: 30px;
         }
+
         .footer-col {
             flex: 1;
             min-width: 140px;
         }
+
         .footer-col h4 {
             margin-bottom: 12px;
             font-size: 16px;
         }
+
         .footer-col a {
             display: block;
             color: #444;
@@ -334,6 +345,7 @@
             font-size: 13px;
             margin-bottom: 8px;
         }
+
         .copyright {
             background: #f2f2f2;
             text-align: center;
@@ -358,27 +370,19 @@
             text-align: center;
         }
 
-        .no-offers-message {
-            background: #fff3cd;
-            color: #856404;
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
         @media (max-width: 800px) {
             .content { padding: 15px; }
             .top-bar { flex-direction: column; text-align: center; }
             .teaser-grid { flex-direction: column; }
             .stage-text-box { max-width: 100%; }
+            .stage-content { padding: 20px; }
         }
     </style>
 </head>
 <body>
 <div class="wrapper">
     <div class="top-bar">
-        <div class="logo">DHL <span>🔍 DEBUG MODE</span></div>
+        <div class="logo">DHL <span>powered by Pega CDH</span></div>
         <div class="main-nav">
             <a href="#">Pakete versenden</a>
             <a href="#">Pakete empfangen</a>
@@ -386,23 +390,16 @@
         </div>
         <div class="subjectid-area">
             <label>SubjectID:</label>
-            <input type="text" id="subjectIdInput" placeholder="SubjectID" value="33782845">
+            <input type="text" id="subjectIdInput" placeholder="z.B. 33782845" value="33782845">
             <button id="loadContentBtn">Aktualisieren</button>
         </div>
     </div>
 
     <div class="content">
-        <!-- 📍 DEBUG ANZEIGE -->
-        <div class="debug-box" id="debugBox">
-            <h3>🔍 DEBUG: ClickThroughURL aus Pega</h3>
-            <div id="debugStageUrl">⏳ Stage: wird geladen...</div>
-            <div id="debugTeaserUrl" style="margin-top: 8px;">⏳ Teaser: wird geladen...</div>
-        </div>
-
         <div class="stage-container">
-            <div class="stage-label">📢 STAGE</div>
+            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH)</div>
             <div class="stage-content" id="stageContent">
-                <div class="loader">Lade Stage-Inhalte...</div>
+                <div class="loader">Lade Stage-Inhalte von Pega CDH...</div>
             </div>
         </div>
 
@@ -415,14 +412,14 @@
         </div>
 
         <div class="teaser-container">
-            <div class="teaser-label">🎯 TEASER</div>
+            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH - mittlere Kachel)</div>
             <div class="teaser-grid">
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-packstation-dhl-de.png');"></div>
                     <div class="teaser-card-content">
                         <h3>DHL Ablageort</h3>
-                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus.</p>
-                        <a href="#" class="teaser-btn">Mehr erfahren</a>
+                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
+                        <a href="#" class="teaser-btn static-left">Mehr erfahren</a>
                     </div>
                 </div>
 
@@ -437,8 +434,8 @@
                     <div class="teaser-card-image" style="background-image: url('https://kayknoche.github.io/Demo/Bild.jpg');"></div>
                     <div class="teaser-card-content">
                         <h3>Paketankündigung erhalten</h3>
-                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird.</p>
-                        <a href="#" class="teaser-btn">Mehr erfahren</a>
+                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
+                        <a href="#" class="teaser-btn static-right">Mehr erfahren</a>
                     </div>
                 </div>
             </div>
@@ -484,11 +481,32 @@
             <a href="#">LinkedIn</a>
         </div>
     </div>
-    <div class="copyright">© 2025 DHL – Debug Version</div>
+    <div class="copyright">© 2025 DHL – Alle Rechte vorbehalten.</div>
 </div>
 
 <script>
     const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
+    let currentSubjectId = "33782845";
+
+    // 🔧 Workaround: URL bereinigen und öffnen
+    function openPegaUrl(url) {
+        if (!url || url === "#" || url === "about:blank") {
+            console.warn("Keine gültige URL");
+            return;
+        }
+        
+        try {
+            // Erst dekodieren, dann neu kodieren (bereinigt Sonderzeichen)
+            const decoded = decodeURI(url);
+            const cleaned = encodeURI(decoded);
+            console.log("🔗 Öffne URL:", cleaned);
+            window.location.href = cleaned;
+        } catch(e) {
+            console.error("URL Fehler:", e);
+            // Fallback: Original URL
+            window.location.href = url;
+        }
+    }
 
     async function fetchPegaContainer(subjectId, containerName) {
         const payload = {
@@ -500,16 +518,91 @@
             "CurrentPage": "Download",
             "AppID": "MEKK"
         };
-        console.log(`Request ${containerName}:`, payload);
         const response = await fetch(PEGA_ENDPOINT, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Accept": "application/json" },
             body: JSON.stringify(payload)
         });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        console.log(`Response ${containerName}:`, data);
-        return data;
+        return await response.json();
+    }
+
+    function hasNoOffers(response, containerName) {
+        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
+        return !container || container.Status === "No Offers available" || !container.RankedResults?.length;
+    }
+
+    function extractFirstResult(response, containerName) {
+        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
+        if (!container || !container.RankedResults?.length) throw new Error("No Offers available");
+        return container.RankedResults[0];
+    }
+
+    function renderStage(result) {
+        const container = document.getElementById("stageContent");
+        const imageUrl = result.ImageURL || "";
+        const title = result.ShortDescription || result.Label || "Ihr persönliches Angebot";
+        const benefits = result.Benefits || "";
+        const clickThroughUrl = result.ClickThroughURL || "#";
+
+        const bgStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
+        container.innerHTML = `
+            <div class="stage-content" style="${bgStyle}">
+                <div class="stage-text-box">
+                    <h2>${escapeHtml(title)}</h2>
+                    <p>${escapeHtml(benefits)}</p>
+                    <a href="#" class="stage-btn" data-url="${escapeHtml(clickThroughUrl)}">Weiter</a>
+                </div>
+            </div>
+        `;
+        const btn = container.querySelector('.stage-btn');
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openPegaUrl(btn.dataset.url);
+        });
+    }
+
+    function showStageNoOffers() {
+        document.getElementById("stageContent").innerHTML = `
+            <div class="stage-content" style="background-color: #f5f5f5; min-height: 200px;">
+                <div class="stage-text-box" style="background: rgba(0,0,0,0.7); width: 100%; text-align: center;">
+                    <h2>📭 No Offers available</h2>
+                    <p>Für diese SubjectID liegt aktuell kein Stage-Angebot vor.</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderMiddleTeaser(result) {
+        const imageUrl = result.ImageURL || "";
+        const title = result.ShortDescription || result.Label || "Service-Tipp";
+        const benefits = result.Benefits || "";
+        const clickThroughUrl = result.ClickThroughURL || "#";
+
+        const imageDiv = document.getElementById("dynamicTeaserImage");
+        if (imageUrl) {
+            imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
+            imageDiv.style.backgroundSize = "cover";
+        } else {
+            imageDiv.style.backgroundColor = "#f0f0f0";
+        }
+
+        const contentDiv = document.getElementById("dynamicTeaserContent");
+        contentDiv.innerHTML = `
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(benefits)}</p>
+            <a href="#" class="teaser-btn" data-url="${escapeHtml(clickThroughUrl)}">Mehr erfahren</a>
+        `;
+        const btn = contentDiv.querySelector('.teaser-btn');
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openPegaUrl(btn.dataset.url);
+        });
+    }
+
+    function showTeaserNoOffers() {
+        document.getElementById("dynamicTeaserImage").style.backgroundColor = "#f0f0f0";
+        document.getElementById("dynamicTeaserContent").innerHTML = `<div class="no-offers-message">📭 No Offers available</div>`;
     }
 
     function escapeHtml(str) {
@@ -519,90 +612,57 @@
 
     async function loadAllContent() {
         const subjectId = document.getElementById("subjectIdInput").value.trim();
-        if (!subjectId) { alert("Bitte SubjectID eingeben"); return; }
+        if (!subjectId) { alert("Bitte eine SubjectID eingeben"); return; }
+        currentSubjectId = subjectId;
 
-        // Debug zurücksetzen
-        document.getElementById("debugStageUrl").innerHTML = "⏳ Stage: wird geladen...";
-        document.getElementById("debugTeaserUrl").innerHTML = "⏳ Teaser: wird geladen...";
         document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage...</div>';
         document.getElementById("dynamicTeaserImage").style.backgroundImage = "none";
         document.getElementById("dynamicTeaserContent").innerHTML = '<div class="loader">Lade Inhalt...</div>';
 
-        // STAGE laden
+        // Stage laden
         try {
-            const stageResponse = await fetchPegaContainer(subjectId, "GetStage");
-            const container = stageResponse.ContainerList?.find(c => c.ContainerName === "GetStage");
-            
-            if (!container || container.Status === "No Offers available" || !container.RankedResults?.length) {
-                document.getElementById("debugStageUrl").innerHTML = "📭 Stage: No Offers available";
-                document.getElementById("stageContent").innerHTML = `<div class="stage-content" style="background-color:#333;"><div class="stage-text-box"><h2>📭 No Offers available</h2><p>Kein Stage-Angebot für diese SubjectID.</p></div></div>`;
+            const stageRes = await fetchPegaContainer(currentSubjectId, "GetStage");
+            if (hasNoOffers(stageRes, "GetStage")) {
+                showStageNoOffers();
             } else {
-                const result = container.RankedResults[0];
-                const clickThroughUrl = result.ClickThroughURL || "❌ KEINE URL (leer/null)";
-                const imageUrl = result.ImageURL || "";
-                const title = result.ShortDescription || result.Label || "Angebot";
-                const benefits = result.Benefits || "";
-                
-                // 🔍 DEBUG ANZEIGE
-                document.getElementById("debugStageUrl").innerHTML = `🔗 Stage ClickThroughURL: <span class="debug-url" style="display:block; background:#333; padding:5px; margin-top:4px; word-break:break-all;">${escapeHtml(clickThroughUrl)}</span>`;
-                
-                const bgStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
-                document.getElementById("stageContent").innerHTML = `
-                    <div class="stage-content" style="${bgStyle}">
-                        <div class="stage-text-box">
-                            <h2>${escapeHtml(title)}</h2>
-                            <p>${escapeHtml(benefits)}</p>
-                            <a href="${escapeHtml(clickThroughUrl)}" class="stage-btn" target="_self">Weiter</a>
-                        </div>
-                    </div>
-                `;
+                renderStage(extractFirstResult(stageRes, "GetStage"));
             }
         } catch (e) {
-            document.getElementById("debugStageUrl").innerHTML = `❌ Stage Fehler: ${e.message}`;
-            document.getElementById("stageContent").innerHTML = `<div class="error-message">Fehler: ${e.message}</div>`;
+            console.error(e);
+            showStageNoOffers();
         }
 
-        // TEASER (mittlere Kachel) laden
+        // Teaser laden
         try {
-            const teaserResponse = await fetchPegaContainer(subjectId, "GetTeaser");
-            const container = teaserResponse.ContainerList?.find(c => c.ContainerName === "GetTeaser");
-            
-            if (!container || container.Status === "No Offers available" || !container.RankedResults?.length) {
-                document.getElementById("debugTeaserUrl").innerHTML = "📭 Teaser: No Offers available";
-                document.getElementById("dynamicTeaserImage").style.backgroundColor = "#f0f0f0";
-                document.getElementById("dynamicTeaserContent").innerHTML = `<div class="no-offers-message">📭 No Offers available</div>`;
+            const teaserRes = await fetchPegaContainer(currentSubjectId, "GetTeaser");
+            if (hasNoOffers(teaserRes, "GetTeaser")) {
+                showTeaserNoOffers();
             } else {
-                const result = container.RankedResults[0];
-                const clickThroughUrl = result.ClickThroughURL || "❌ KEINE URL (leer/null)";
-                const imageUrl = result.ImageURL || "";
-                const title = result.ShortDescription || result.Label || "Service-Tipp";
-                const benefits = result.Benefits || "";
-                
-                // 🔍 DEBUG ANZEIGE
-                document.getElementById("debugTeaserUrl").innerHTML = `🔗 Teaser ClickThroughURL: <span class="debug-url" style="display:block; background:#333; padding:5px; margin-top:4px; word-break:break-all;">${escapeHtml(clickThroughUrl)}</span>`;
-                
-                const imageDiv = document.getElementById("dynamicTeaserImage");
-                if (imageUrl) {
-                    imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
-                    imageDiv.style.backgroundSize = "cover";
-                } else {
-                    imageDiv.style.backgroundColor = "#f0f0f0";
-                }
-                document.getElementById("dynamicTeaserContent").innerHTML = `
-                    <h3>${escapeHtml(title)}</h3>
-                    <p>${escapeHtml(benefits)}</p>
-                    <a href="${escapeHtml(clickThroughUrl)}" class="teaser-btn" target="_self">Mehr erfahren</a>
-                `;
+                renderMiddleTeaser(extractFirstResult(teaserRes, "GetTeaser"));
             }
         } catch (e) {
-            document.getElementById("debugTeaserUrl").innerHTML = `❌ Teaser Fehler: ${e.message}`;
-            document.getElementById("dynamicTeaserImage").style.backgroundColor = "#f0f0f0";
-            document.getElementById("dynamicTeaserContent").innerHTML = `<div class="error-message">Fehler: ${e.message}</div>`;
+            console.error(e);
+            showTeaserNoOffers();
         }
     }
 
+    // Statische Buttons
+    function bindStaticButtons() {
+        document.querySelector('.static-left')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '#';
+        });
+        document.querySelector('.static-right')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '#';
+        });
+    }
+
     document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
-    document.addEventListener("DOMContentLoaded", loadAllContent);
+    document.addEventListener("DOMContentLoaded", () => {
+        loadAllContent();
+        bindStaticButtons();
+    });
 </script>
 </body>
 </html>
