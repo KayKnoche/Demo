@@ -361,15 +361,6 @@
             color: #666;
         }
 
-        .error-message {
-            background: #ffe0e0;
-            color: #d40511;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px;
-            text-align: center;
-        }
-
         @media (max-width: 800px) {
             .content { padding: 15px; }
             .top-bar { flex-direction: column; text-align: center; }
@@ -486,7 +477,6 @@
 
 <script>
     const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
-    let currentSubjectId = "33782845";
 
     function openPegaUrl(url) {
         if (!url || url === "#" || url === "about:blank") return;
@@ -604,14 +594,13 @@
     async function loadAllContent() {
         const subjectId = document.getElementById("subjectIdInput").value.trim();
         if (!subjectId) { alert("Bitte eine SubjectID eingeben"); return; }
-        currentSubjectId = subjectId;
 
         document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage...</div>';
         document.getElementById("dynamicTeaserImage").style.backgroundImage = "none";
         document.getElementById("dynamicTeaserContent").innerHTML = '<div class="loader">Lade Inhalt...</div>';
 
         try {
-            const stageRes = await fetchPegaContainer(currentSubjectId, "GetStage");
+            const stageRes = await fetchPegaContainer(subjectId, "GetStage");
             if (hasNoOffers(stageRes, "GetStage")) {
                 showStageNoOffers();
             } else {
@@ -622,7 +611,7 @@
         }
 
         try {
-            const teaserRes = await fetchPegaContainer(currentSubjectId, "GetTeaser");
+            const teaserRes = await fetchPegaContainer(subjectId, "GetTeaser");
             if (hasNoOffers(teaserRes, "GetTeaser")) {
                 showTeaserNoOffers();
             } else {
