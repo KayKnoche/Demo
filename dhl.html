@@ -488,22 +488,13 @@
     const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
     let currentSubjectId = "33782845";
 
-    // 🔧 Workaround: URL bereinigen und öffnen
     function openPegaUrl(url) {
-        if (!url || url === "#" || url === "about:blank") {
-            console.warn("Keine gültige URL");
-            return;
-        }
-        
+        if (!url || url === "#" || url === "about:blank") return;
         try {
-            // Erst dekodieren, dann neu kodieren (bereinigt Sonderzeichen)
             const decoded = decodeURI(url);
             const cleaned = encodeURI(decoded);
-            console.log("🔗 Öffne URL:", cleaned);
             window.location.href = cleaned;
         } catch(e) {
-            console.error("URL Fehler:", e);
-            // Fallback: Original URL
             window.location.href = url;
         }
     }
@@ -619,7 +610,6 @@
         document.getElementById("dynamicTeaserImage").style.backgroundImage = "none";
         document.getElementById("dynamicTeaserContent").innerHTML = '<div class="loader">Lade Inhalt...</div>';
 
-        // Stage laden
         try {
             const stageRes = await fetchPegaContainer(currentSubjectId, "GetStage");
             if (hasNoOffers(stageRes, "GetStage")) {
@@ -628,11 +618,9 @@
                 renderStage(extractFirstResult(stageRes, "GetStage"));
             }
         } catch (e) {
-            console.error(e);
             showStageNoOffers();
         }
 
-        // Teaser laden
         try {
             const teaserRes = await fetchPegaContainer(currentSubjectId, "GetTeaser");
             if (hasNoOffers(teaserRes, "GetTeaser")) {
@@ -641,12 +629,10 @@
                 renderMiddleTeaser(extractFirstResult(teaserRes, "GetTeaser"));
             }
         } catch (e) {
-            console.error(e);
             showTeaserNoOffers();
         }
     }
 
-    // Statische Buttons
     function bindStaticButtons() {
         document.querySelector('.static-left')?.addEventListener('click', (e) => {
             e.preventDefault();
