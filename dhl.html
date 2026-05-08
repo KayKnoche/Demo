@@ -447,9 +447,9 @@
                     </div>
                 </div>
 
-                <!-- Rechte Kachel: statisch (Paketankündigung erhalten) -->
+                <!-- Rechte Kachel: statisch (Paketankündigung erhalten) mit deinem Bild -->
                 <div class="teaser-card">
-                    <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-ankuendigung-dhl-de.png');"></div>
+                    <div class="teaser-card-image" style="background-image: url('https://kayknoche.github.io/Demo/Bild.jpg');"></div>
                     <div class="teaser-card-content">
                         <h3>Paketankündigung erhalten</h3>
                         <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
@@ -596,7 +596,6 @@
         const btn = stageContainer.querySelector('.stage-btn');
         if (btn && btn.dataset.url && btn.dataset.url !== '#') {
             btn.addEventListener('click', () => {
-                // Im gleichen Tab öffnen
                 window.location.href = btn.dataset.url;
             });
         }
@@ -641,7 +640,6 @@
         const btn = contentDiv.querySelector('.teaser-btn');
         if (btn && btn.dataset.url && btn.dataset.url !== '#') {
             btn.addEventListener('click', () => {
-                // Im gleichen Tab öffnen
                 window.location.href = btn.dataset.url;
             });
         }
