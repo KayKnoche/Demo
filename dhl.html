@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL - Pakete versenden & empfangen</title>
+    <title>DHL - Pega CDH RealTime Container</title>
     <style>
         * {
             margin: 0;
@@ -42,6 +42,12 @@
             letter-spacing: -1px;
         }
 
+        .logo span {
+            font-size: 12px;
+            color: #666;
+            margin-left: 5px;
+        }
+
         .main-nav {
             display: flex;
             gap: 28px;
@@ -54,13 +60,42 @@
             color: #1a1a1a;
         }
 
-        .user-area {
+        /* SubjectID Input Bereich */
+        .subjectid-area {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
-            background: rgba(0,0,0,0.05);
+            background: rgba(0,0,0,0.08);
             padding: 5px 15px;
             border-radius: 30px;
+        }
+
+        .subjectid-area label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .subjectid-area input {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            width: 130px;
+        }
+
+        .subjectid-area button {
+            background: #d40511;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .subjectid-area button:hover {
+            background: #a0040e;
         }
 
         /* ========== CONTENT ========== */
@@ -68,7 +103,88 @@
             padding: 25px 30px;
         }
 
-        /* gelbe Box */
+        /* ===== STAGE BEREICH (dynamisch, rot umrandet) ===== */
+        .stage-container {
+            border: 3px solid #ff0000;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            background: #fff;
+            transition: all 0.2s ease;
+            overflow: hidden;
+        }
+
+        .stage-label {
+            background: #ff0000;
+            color: white;
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 0 0 8px 0;
+            margin-bottom: 0;
+        }
+
+        .stage-content {
+            padding: 40px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+        }
+
+        .stage-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.45);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .stage-text-box {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 60%;
+            background: rgba(0,0,0,0.5);
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .stage-text-box h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .stage-text-box p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .stage-btn {
+            background: #ffcc00;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .stage-btn:hover {
+            transform: scale(1.02);
+            background: #e6b800;
+        }
+
+        /* gelbe Box (statisch) */
         .alert-box {
             background: #ffefb9;
             border-radius: 12px;
@@ -130,66 +246,94 @@
             font-weight: bold;
             cursor: pointer;
         }
-        .filter-row {
-            display: flex;
-            gap: 20px;
-            font-size: 13px;
-            margin: 12px 0 6px;
-        }
-        .filter-row a {
-            text-decoration: none;
-            color: #555;
-        }
-        .small-note {
-            font-size: 11px;
-            color: #777;
+
+        /* ===== TEASER BEREICH (dynamisch, rot umrandet) ===== */
+        .teaser-container {
+            border: 3px solid #ff0000;
+            border-radius: 12px;
+            margin: 30px 0 35px;
+            background: #fff;
         }
 
-        /* einleitung */
-        .section-lead {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 30px 0 8px;
-        }
-        .sub-lead {
-            font-size: 14px;
-            margin-bottom: 25px;
-            color: #444;
-        }
-        .sub-lead a {
-            color: #d40511;
-            text-decoration: none;
+        .teaser-label {
+            background: #ff0000;
+            color: white;
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 0 0 8px 0;
+            margin-bottom: 0;
         }
 
-        /* drei karten */
-        .cards {
+        .teaser-content {
+            padding: 0;
+        }
+
+        .teaser-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 25px;
-            margin: 20px 0 35px;
-        }
-        .card {
-            flex: 1;
-            min-width: 220px;
-            border: 1px solid #e5e5e5;
-            border-radius: 12px;
             padding: 20px;
-            background: #fff;
         }
-        .card h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
+
+        .teaser-card {
+            flex: 1;
+            min-width: 250px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            align-items: flex-end;
         }
-        .card p {
+
+        .teaser-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .teaser-text-box {
+            position: relative;
+            z-index: 2;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent);
+        }
+
+        .teaser-text-box h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .teaser-text-box p {
             font-size: 14px;
-            color: #5a5a5a;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             line-height: 1.4;
         }
-        .card a {
-            color: #d40511;
-            text-decoration: none;
-            font-weight: 500;
+
+        .teaser-btn {
+            background: #ffcc00;
+            color: #1a1a1a;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .teaser-btn:hover {
+            background: #e6b800;
         }
 
         /* gelber banner */
@@ -203,56 +347,7 @@
             margin: 15px 0 35px;
         }
 
-        /* ====== PORTO BEREICH (Tabelle) ====== */
-        .porto-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            margin: 30px 0 50px;
-            border-top: 1px solid #eee;
-            padding-top: 30px;
-        }
-        .porto-form {
-            flex: 1.2;
-        }
-        .porto-table {
-            flex: 1;
-            background: #fafafc;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-        }
-        .porto-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .porto-table td {
-            padding: 8px 4px;
-            border-bottom: 1px solid #ddd;
-        }
-        .porto-price {
-            font-weight: bold;
-            font-size: 20px;
-            color: #d40511;
-        }
-        .btn-kaufen {
-            background: #ffcc00;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 30px;
-            margin-top: 15px;
-            cursor: pointer;
-            width: 100%;
-        }
-        .porto-link {
-            margin-top: 12px;
-            display: inline-block;
-            color: #d40511;
-            text-decoration: none;
-        }
-
-        /* footer links */
+        /* footer */
         .footer-links {
             background: #f2f2f2;
             padding: 35px 30px 25px;
@@ -286,6 +381,22 @@
             color: #666;
         }
 
+        /* Loading & Error */
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error-message {
+            background: #ffe0e0;
+            color: #d40511;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px;
+            text-align: center;
+        }
+
         @media (max-width: 800px) {
             .content {
                 padding: 15px;
@@ -294,30 +405,45 @@
                 flex-direction: column;
                 text-align: center;
             }
-            .cards {
+            .teaser-grid {
                 flex-direction: column;
+            }
+            .stage-text-box {
+                max-width: 100%;
+            }
+            .stage-content {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
 <div class="wrapper">
-    <!-- Header -->
+    <!-- Header mit SubjectID Input -->
     <div class="top-bar">
-        <div class="logo">DHH</div>
+        <div class="logo">DHL <span>powered by Pega CDH</span></div>
         <div class="main-nav">
             <a href="#">Pakete versenden</a>
             <a href="#">Pakete empfangen</a>
             <a href="#">Hilfe & Kontakt</a>
         </div>
-        <div class="user-area">
-            <span>Kay Knoche</span>
-            <span style="background:#d40511; color:white; padding:2px 12px; border-radius:30px;">55 Pakete</span>
+        <div class="subjectid-area">
+            <label>SubjectID:</label>
+            <input type="text" id="subjectIdInput" placeholder="z.B. 33782845" value="33782845">
+            <button id="loadContentBtn">Aktualisieren</button>
         </div>
     </div>
 
     <div class="content">
-        <!-- gelbe Info Box -->
+        <!-- ===== DYNAMISCHER STAGE BEREICH ===== -->
+        <div class="stage-container">
+            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH)</div>
+            <div class="stage-content" id="stageContent">
+                <div class="loader">Lade Stage-Inhalte von Pega CDH...</div>
+            </div>
+        </div>
+
+        <!-- Statische Elemente (DHL Standard) -->
         <div class="alert-box">
             <div class="alert-text">
                 <strong>🔔 DIGITALE BENACHRICHTIGUNG DIREKT AUFS HANDY</strong>
@@ -326,74 +452,28 @@
             <button class="alert-btn">Weiter</button>
         </div>
 
-        <!-- Sendung verfolgen -->
         <div class="tracking-card">
             <div class="tracking-title">Sendung verfolgen</div>
             <div class="tracking-row">
                 <input type="text" placeholder="Sendungsnummer">
                 <button class="search-btn">Suchen</button>
             </div>
-            <div class="filter-row">
-                <a href="#">Filtern</a>
-                <a href="#">Archiv einblenden</a>
-            </div>
-            <div class="small-note">Nach 21 Tagen werden Sendungen im Archiv gespeichert, für die ggf. eine längere Beauskunftung möglich ist.</div>
         </div>
 
-        <!-- Empfangen Sie Ihre Pakete noch bequemer -->
-        <div class="section-lead">Empfangen Sie Ihre Pakete noch bequemer</div>
-        <div class="sub-lead">
-            Unter <a href="#">Meine Daten & Services</a> können Sie die Einstellungen für Ihren Paketempfang jederzeit ändern.
-        </div>
-
-        <!-- Drei Services -->
-        <div class="cards">
-            <div class="card">
-                <h3>DHH Ablageort</h3>
-                <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus und lassen Sie Ihre Pakete dort hinterlegen.</p>
-                <a href="#">Mehr erfahren &gt;</a>
-            </div>
-            <div class="card">
-                <h3>Digitale Benachrichtigung</h3>
-                <p>Sofort per E-Mail und App erfahren, wo Sie Ihr zugestelltes Paket abholen können.</p>
-                <a href="#">Mehr erfahren &gt;</a>
-            </div>
-            <div class="card">
-                <h3>Paketankündigung erhalten</h3>
-                <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird und ändern Sie die Lieferung flexibel.</p>
-                <a href="#">Mehr erfahren &gt;</a>
+        <!-- ===== DYNAMISCHER TEASER BEREICH ===== -->
+        <div class="teaser-container">
+            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH)</div>
+            <div class="teaser-content" id="teaserContent">
+                <div class="loader">Lade Teaser-Inhalte von Pega CDH...</div>
             </div>
         </div>
 
-        <!-- gelber Banner "Schon ab 4,19 EUR" -->
         <div class="yellow-banner">
             ✨ Schon ab 4,19 EUR deutschlandweit versenden
         </div>
-
-        <!-- Porto berechnen + Tabelle (exakt aus dem Bild) -->
-        <div class="porto-section">
-            <div class="porto-form">
-                <h3 style="margin-bottom: 20px; font-size: 22px;">Porto berechnen</h3>
-                <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div><strong>Länderanzahl:</strong> Deutschland</div>
-                    <div><strong>Art:</strong> Karton</div>
-                    <div><strong>Gewicht:</strong> bis 2 kg</div>
-                </div>
-            </div>
-            <div class="porto-table">
-                <table>
-                    <tr><td><strong>Päckchen</strong></td><td class="porto-price">€</td></tr>
-                    <tr><td>Laufzeit in der Regel 1-2 Werktage</td><td style="font-weight: bold;">4,19 €</td></tr>
-                    <tr><td>✕ Haftung</td><td></td></tr>
-                    <tr><td>✕ Sendungsverfolgung</td><td></td></tr>
-                </table>
-                <a href="#" class="porto-link">Eigenschaften ändern →</a>
-                <button class="btn-kaufen">Jetzt kaufen (4,19 €)</button>
-            </div>
-        </div>
     </div>
 
-    <!-- Footer (Privatkunden / Geschäftskunden / Über uns / Social) -->
+    <!-- Footer -->
     <div class="footer-links">
         <div class="footer-col">
             <h4>Privatkunden</h4>
@@ -433,5 +513,253 @@
         © 2025 DHL – Alle Rechte vorbehalten.
     </div>
 </div>
+
+<script>
+    // Pega CDH Endpoint
+    const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
+
+    // Aktuelle SubjectID
+    let currentSubjectId = "33782845";
+
+    // Funktion: Pega Request für einen bestimmten Container
+    async function fetchPegaContainer(subjectId, containerName) {
+        const payload = {
+            "SubjectID": subjectId,
+            "ContextName": "Customer",
+            "ContainerName": containerName,
+            "Channel": "Web",
+            "Direction": "Inbound",
+            "CurrentPage": "Download",
+            "AppID": "MEKK"
+        };
+
+        console.log(`Request ${containerName}:`, payload);
+
+        const response = await fetch(PEGA_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log(`Response ${containerName}:`, data);
+        return data;
+    }
+
+    // Extrahiert das erste RankedResult aus der Response
+    function extractFirstResult(response, containerName) {
+        if (response.Status !== "OK") {
+            throw new Error(`Pega Status: ${response.Status}`);
+        }
+
+        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
+        if (!container || container.Status !== "OK") {
+            throw new Error(`Container ${containerName} nicht gefunden oder nicht OK`);
+        }
+
+        if (!container.RankedResults || container.RankedResults.length === 0) {
+            throw new Error(`Keine RankedResults für ${containerName}`);
+        }
+
+        return container.RankedResults[0];
+    }
+
+    // Rendert Stage-Bereich
+    function renderStage(result) {
+        const stageContainer = document.getElementById("stageContent");
+        const imageUrl = result.ImageURL || "";
+        const title = result.ShortDescription || result.Label || "Ihr persönliches Angebot";
+        const benefits = result.Benefits || "";
+        const clickThroughUrl = result.ClickThroughURL || "#";
+
+        // Hintergrundbild-URL
+        const bgImageStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
+
+        stageContainer.innerHTML = `
+            <div class="stage-content" style="${bgImageStyle}">
+                <div class="stage-text-box">
+                    <h2>${escapeHtml(title)}</h2>
+                    <p>${escapeHtml(benefits)}</p>
+                    <button class="stage-btn" data-url="${escapeHtml(clickThroughUrl)}">Weiter</button>
+                </div>
+            </div>
+        `;
+
+        // Button Click-Event
+        const btn = stageContainer.querySelector('.stage-btn');
+        if (btn && btn.dataset.url && btn.dataset.url !== '#') {
+            btn.addEventListener('click', () => {
+                window.open(btn.dataset.url, '_blank');
+            });
+        }
+    }
+
+    // Rendert Teaser-Bereich (alle RankedResults)
+    function renderTeaser(response) {
+        const teaserContainer = document.getElementById("teaserContent");
+        
+        // Finde den GetTeaser Container
+        const teaserContainerObj = response.ContainerList?.find(c => c.ContainerName === "GetTeaser");
+        
+        if (!teaserContainerObj || !teaserContainerObj.RankedResults || teaserContainerObj.RankedResults.length === 0) {
+            teaserContainer.innerHTML = renderTeaserFallback();
+            return;
+        }
+
+        const results = teaserContainerObj.RankedResults;
+        
+        const teaserHtml = `
+            <div class="teaser-grid">
+                ${results.map(result => {
+                    const imageUrl = result.ImageURL || "";
+                    const title = result.ShortDescription || result.Label || "Service-Tipp";
+                    const benefits = result.Benefits || "";
+                    const clickThroughUrl = result.ClickThroughURL || "#";
+                    const bgImageStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #555;';
+                    
+                    return `
+                        <div class="teaser-card" style="${bgImageStyle}">
+                            <div class="teaser-text-box">
+                                <h3>${escapeHtml(title)}</h3>
+                                <p>${escapeHtml(benefits)}</p>
+                                <button class="teaser-btn" data-url="${escapeHtml(clickThroughUrl)}">Mehr erfahren</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+        
+        teaserContainer.innerHTML = teaserHtml;
+
+        // Buttons mit Click-Events versehen
+        const btns = teaserContainer.querySelectorAll('.teaser-btn');
+        btns.forEach(btn => {
+            if (btn.dataset.url && btn.dataset.url !== '#') {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    window.open(btn.dataset.url, '_blank');
+                });
+            }
+        });
+    }
+
+    // Fallback für Stage
+    function renderStageFallback() {
+        const stageContainer = document.getElementById("stageContent");
+        stageContainer.innerHTML = `
+            <div class="stage-content" style="background-color: #333;">
+                <div class="stage-text-box">
+                    <h2>DHL SmartDelivery</h2>
+                    <p>Bestimmen Sie selbst, wann und wo Ihre Pakete ankommen.</p>
+                    <button class="stage-btn">Weiter</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Fallback für Teaser
+    function renderTeaserFallback() {
+        return `
+            <div class="teaser-grid">
+                <div class="teaser-card" style="background-color: #666;">
+                    <div class="teaser-text-box">
+                        <h3>DHL Ablageort</h3>
+                        <p>Wählen Sie einen Ablageort auf Ihrem Grundstück aus.</p>
+                        <button class="teaser-btn">Mehr erfahren</button>
+                    </div>
+                </div>
+                <div class="teaser-card" style="background-color: #555;">
+                    <div class="teaser-text-box">
+                        <h3>Digitale Benachrichtigung</h3>
+                        <p>Sofort per E-Mail und App erfahren, wo Ihr Paket ist.</p>
+                        <button class="teaser-btn">Mehr erfahren</button>
+                    </div>
+                </div>
+                <div class="teaser-card" style="background-color: #777;">
+                    <div class="teaser-text-box">
+                        <h3>Paketankündigung erhalten</h3>
+                        <p>Erfahren Sie per E-Mail, wann Ihr Paket geliefert wird.</p>
+                        <button class="teaser-btn">Mehr erfahren</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Hauptfunktion: Lädt Stage und Teaser
+    async function loadAllContent() {
+        const subjectId = document.getElementById("subjectIdInput").value.trim();
+        if (!subjectId) {
+            alert("Bitte eine SubjectID eingeben");
+            return;
+        }
+        currentSubjectId = subjectId;
+
+        // Stage Bereich: Lade-Modus anzeigen
+        document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage-Inhalte...</div>';
+        // Teaser Bereich: Lade-Modus anzeigen
+        document.getElementById("teaserContent").innerHTML = '<div class="loader">Lade Teaser-Inhalte...</div>';
+
+        try {
+            // Stage laden
+            try {
+                const stageResponse = await fetchPegaContainer(currentSubjectId, "GetStage");
+                const stageResult = extractFirstResult(stageResponse, "GetStage");
+                renderStage(stageResult);
+            } catch (stageError) {
+                console.error("Stage Fehler:", stageError);
+                document.getElementById("stageContent").innerHTML = `
+                    <div class="error-message">
+                        ⚠️ Stage Fehler: ${stageError.message}<br>
+                        <small>Fallback wird angezeigt.</small>
+                    </div>
+                `;
+                renderStageFallback();
+            }
+
+            // Teaser laden
+            try {
+                const teaserResponse = await fetchPegaContainer(currentSubjectId, "GetTeaser");
+                renderTeaser(teaserResponse);
+            } catch (teaserError) {
+                console.error("Teaser Fehler:", teaserError);
+                document.getElementById("teaserContent").innerHTML = `
+                    <div class="error-message">
+                        ⚠️ Teaser Fehler: ${teaserError.message}<br>
+                        <small>Fallback wird angezeigt.</small>
+                    </div>
+                ` + renderTeaserFallback();
+            }
+
+        } catch (globalError) {
+            console.error("Allgemeiner Fehler:", globalError);
+        }
+    }
+
+    // Escape HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    // Event Listener
+    document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
+    
+    // Seite laden + automatischer erster Call
+    document.addEventListener("DOMContentLoaded", loadAllContent);
+</script>
 </body>
 </html>
