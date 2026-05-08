@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Test - Link Funktion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            text-align: center;
+        }
+        .test-area {
+            margin: 30px auto;
+            padding: 30px;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            max-width: 500px;
+        }
+        .test-link {
+            display: inline-block;
+            background: #ffcc00;
+            color: #1a1a1a;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 10px;
+        }
+        .test-link:hover {
+            background: #e6b800;
+        }
+        button {
+            background: #d40511;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🧪 Minimal Test: Link funktioniert?</h1>
+    
+    <div class="test-area">
+        <h2>Test 1: Normaler HTML Link (statisch)</h2>
+        <a href="https://www.otto.de" class="test-link" target="_self">🔗 Weiter zu OTTO (normaler Link)</a>
+        <p>Dieser Link ist direkt im HTML-Code - KEIN JavaScript.</p>
+    </div>
+
+    <div class="test-area">
+        <h2>Test 2: Link wurde per JavaScript erstellt (dynamisch)</h2>
+        <div id="dynamicLinkContainer"></div>
+        <p>Dieser Link wird nach dem Laden der Seite per JavaScript eingefügt.</p>
+    </div>
+
+    <div class="test-area">
+        <h2>Test 3: JavaScript window.location.href</h2>
+        <button id="jsButton">Klick mich (window.location)</button>
+        <p>Öffnet im gleichen Tab per JavaScript.</p>
+    </div>
+
+    <div class="result" id="result">
+        ✅ Klicke auf die Links/Buttons - was passiert?
+    </div>
+
+    <script>
+        // Test 2: Dynamisch erstellter Link (wie bei Pega)
+        const container = document.getElementById('dynamicLinkContainer');
+        const dynamicLink = document.createElement('a');
+        dynamicLink.href = 'https://www.otto.de';
+        dynamicLink.target = '_self';
+        dynamicLink.className = 'test-link';
+        dynamicLink.textContent = '🔗 Dynamischer Link zu OTTO';
+        container.appendChild(dynamicLink);
+
+        // Test 3: JavaScript window.location
+        document.getElementById('jsButton').addEventListener('click', function() {
+            window.location.href = 'https://www.otto.de';
+        });
+
+        // Loggt Klicks in die Ergebnisbox
+        document.querySelectorAll('.test-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                document.getElementById('result').innerHTML = `📊 Geklickt: ${this.textContent} - Ziel: ${this.href}<br>⏳ Leitet weiter...`;
+            });
+        });
+        
+        document.getElementById('jsButton').addEventListener('click', function() {
+            document.getElementById('result').innerHTML = `📊 Geklickt: JavaScript Button - Ziel: https://www.otto.de<br>⏳ Leitet weiter...`;
+        });
+    </script>
+
+    <p style="margin-top: 40px; color: #666; font-size: 12px;">
+        ⚠️ Bitte beachten: Wenn einer dieser Tests blockiert wird, liegt es an deinem Browser / einer Erweiterung / Firewall.
+    </p>
+
+</body>
+</html>
