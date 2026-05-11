@@ -3,377 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL - Pega CDH RealTime Container (Test: OTTO.de)</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #e9ecef;
-            color: #1a1a1a;
-        }
-
-        .wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-        }
-
-        .top-bar {
-            background: #ffcc00;
-            padding: 12px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
-            color: #d40511;
-            letter-spacing: -1px;
-        }
-
-        .logo span {
-            font-size: 12px;
-            color: #666;
-            margin-left: 5px;
-        }
-
-        .main-nav {
-            display: flex;
-            gap: 28px;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .main-nav a {
-            text-decoration: none;
-            color: #1a1a1a;
-        }
-
-        .subjectid-area {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            background: rgba(0,0,0,0.08);
-            padding: 5px 15px;
-            border-radius: 30px;
-        }
-
-        .subjectid-area label {
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .subjectid-area input {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-            width: 130px;
-        }
-
-        .subjectid-area button {
-            background: #d40511;
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .subjectid-area button:hover {
-            background: #a0040e;
-        }
-
-        .content {
-            padding: 25px 30px;
-        }
-
-        .stage-container {
-            border: 3px solid #ff0000;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            background: #fff;
-            overflow: hidden;
-        }
-
-        .stage-label {
-            background: #ff0000;
-            color: white;
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 0 0 8px 0;
-        }
-
-        .stage-content {
-            padding: 40px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-            min-height: 280px;
-            display: flex;
-            align-items: center;
-        }
-
-        .stage-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.45);
-        }
-
-        .stage-text-box {
-            position: relative;
-            z-index: 2;
-            color: white;
-            max-width: 60%;
-            background: rgba(0,0,0,0.5);
-            padding: 25px;
-            border-radius: 12px;
-        }
-
-        .stage-text-box h2 {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .stage-text-box p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .stage-btn {
-            display: inline-block;
-            background: #ffcc00;
-            color: #1a1a1a;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
-
-        .stage-btn:hover {
-            transform: scale(1.02);
-            background: #e6b800;
-        }
-
-        .tracking-card {
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 20px 25px;
-            margin-bottom: 30px;
-            background: white;
-        }
-
-        .tracking-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .tracking-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .tracking-row input {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #bbb;
-            border-radius: 6px;
-            font-size: 15px;
-        }
-
-        .search-btn {
-            background: #d40511;
-            color: white;
-            border: none;
-            padding: 0 28px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .teaser-container {
-            border: 3px solid #ff0000;
-            border-radius: 12px;
-            margin: 30px 0 35px;
-            background: #fff;
-        }
-
-        .teaser-label {
-            background: #ff0000;
-            color: white;
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: bold;
-            border-radius: 0 0 8px 0;
-        }
-
-        .teaser-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 25px;
-            padding: 20px;
-        }
-
-        .teaser-card {
-            flex: 1;
-            min-width: 220px;
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .teaser-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .teaser-card-image {
-            width: 100%;
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-color: #f0f0f0;
-        }
-
-        .teaser-card-content {
-            padding: 16px;
-        }
-
-        .teaser-card-content h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #d40511;
-        }
-
-        .teaser-card-content p {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-
-        .teaser-btn {
-            display: inline-block;
-            background: #ffcc00;
-            color: #1a1a1a;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 13px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .teaser-btn:hover {
-            background: #e6b800;
-        }
-
-        .no-offers-message {
-            background: #fff3cd;
-            color: #856404;
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
-        .yellow-banner {
-            background: #ffcc00;
-            border-radius: 12px;
-            text-align: center;
-            padding: 20px;
-            font-size: 20px;
-            font-weight: 700;
-            margin: 15px 0 35px;
-        }
-
-        .footer-links {
-            background: #f2f2f2;
-            padding: 35px 30px 25px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .footer-col {
-            flex: 1;
-            min-width: 140px;
-        }
-
-        .footer-col h4 {
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
-
-        .footer-col a {
-            display: block;
-            color: #444;
-            text-decoration: none;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .copyright {
-            background: #f2f2f2;
-            text-align: center;
-            font-size: 11px;
-            padding: 15px;
-            border-top: 1px solid #ddd;
-            color: #666;
-        }
-
-        .loader {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        @media (max-width: 800px) {
-            .content { padding: 15px; }
-            .top-bar { flex-direction: column; text-align: center; }
-            .teaser-grid { flex-direction: column; }
-            .stage-text-box { max-width: 100%; }
-            .stage-content { padding: 20px; }
-        }
-    </style>
+    <title>DHL - Pega CDH RealTime Container</title>
+    <link rel="stylesheet" href="./css/mystyle.css">
 </head>
 <body>
 <div class="wrapper">
     <div class="top-bar">
-        <div class="logo">DHL <span>Test: OTTO.de</span></div>
+        <div class="logo">DHL <span>powered by Pega CDH</span></div>
         <div class="main-nav">
             <a href="#">Pakete versenden</a>
             <a href="#">Pakete empfangen</a>
@@ -387,13 +23,15 @@
     </div>
 
     <div class="content">
+        <!-- STAGE Bereich – roter Rahmen -->
         <div class="stage-container">
-            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH – Link auf OTTO.de)</div>
-            <div class="stage-content" id="stageContent">
-                <div class="loader">Lade Stage-Inhalte von Pega CDH...</div>
+            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH)</div>
+            <div id="stageContent" class="stage-content-placeholder">
+                <div class="loader">Lade Stage-Inhalte...</div>
             </div>
         </div>
 
+        <!-- Tracking (statisch) -->
         <div class="tracking-card">
             <div class="tracking-title">Sendung verfolgen</div>
             <div class="tracking-row">
@@ -402,9 +40,11 @@
             </div>
         </div>
 
+        <!-- TEASER Bereich – roter Rahmen, mit statischen Kacheln links/rechts -->
         <div class="teaser-container">
-            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH – Link auf OTTO.de)</div>
+            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH - mittlere Kachel)</div>
             <div class="teaser-grid">
+                <!-- Linke Kachel: statisch (DHL Ablageort) -->
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-packstation-dhl-de.png');"></div>
                     <div class="teaser-card-content">
@@ -414,13 +54,12 @@
                     </div>
                 </div>
 
-                <div class="teaser-card" id="dynamicTeaserCard">
-                    <div class="teaser-card-image" id="dynamicTeaserImage" style="background-color: #f0f0f0;"></div>
-                    <div class="teaser-card-content" id="dynamicTeaserContent">
-                        <div class="loader">Lade Inhalt...</div>
-                    </div>
+                <!-- MITTLERE KACHEL: dynamisch – wird aus teaser.html geladen -->
+                <div id="teaserContent" class="teaser-card-placeholder">
+                    <div class="loader">Lade Teaser-Inhalt...</div>
                 </div>
 
+                <!-- Rechte Kachel: statisch (Paketankündigung erhalten) -->
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://kayknoche.github.io/Demo/Bild.jpg');"></div>
                     <div class="teaser-card-content">
@@ -475,149 +114,6 @@
     <div class="copyright">© 2025 DHL – Alle Rechte vorbehalten.</div>
 </div>
 
-<script>
-    const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
-
-    async function fetchPegaContainer(subjectId, containerName) {
-        const payload = {
-            "SubjectID": subjectId,
-            "ContextName": "Customer",
-            "ContainerName": containerName,
-            "Channel": "Web",
-            "Direction": "Inbound",
-            "CurrentPage": "Download",
-            "AppID": "MEKK"
-        };
-        const response = await fetch(PEGA_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-    }
-
-    function hasNoOffers(response, containerName) {
-        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
-        return !container || container.Status === "No Offers available" || !container.RankedResults?.length;
-    }
-
-    function extractFirstResult(response, containerName) {
-        const container = response.ContainerList?.find(c => c.ContainerName === containerName);
-        if (!container || !container.RankedResults?.length) throw new Error("No Offers available");
-        return container.RankedResults[0];
-    }
-
-    // ⭐ Hier wird die URL auf OTTO.de gesetzt, unabhängig von Pega
-    const TEST_URL = "https://www.otto.de";
-
-    function renderStage(result) {
-        const container = document.getElementById("stageContent");
-        const imageUrl = result.ImageURL || "";
-        const title = result.ShortDescription || result.Label || "Ihr persönliches Angebot";
-        const benefits = result.Benefits || "";
-
-        const bgStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
-        container.innerHTML = `
-            <div class="stage-content" style="${bgStyle}">
-                <div class="stage-text-box">
-                    <h2>${escapeHtml(title)}</h2>
-                    <p>${escapeHtml(benefits)}</p>
-                    <a href="${TEST_URL}" class="stage-btn" target="_self" rel="noopener noreferrer">Weiter</a>
-                </div>
-            </div>
-        `;
-    }
-
-    function showStageNoOffers() {
-        document.getElementById("stageContent").innerHTML = `
-            <div class="stage-content" style="background-color: #f5f5f5; min-height: 200px;">
-                <div class="stage-text-box" style="background: rgba(0,0,0,0.7); width: 100%; text-align: center;">
-                    <h2>📭 No Offers available</h2>
-                    <p>Für diese SubjectID liegt aktuell kein Stage-Angebot vor.</p>
-                </div>
-            </div>
-        `;
-    }
-
-    function renderMiddleTeaser(result) {
-        const imageUrl = result.ImageURL || "";
-        const title = result.ShortDescription || result.Label || "Service-Tipp";
-        const benefits = result.Benefits || "";
-
-        const imageDiv = document.getElementById("dynamicTeaserImage");
-        if (imageUrl) {
-            imageDiv.style.backgroundImage = `url('${escapeHtml(imageUrl)}')`;
-            imageDiv.style.backgroundSize = "cover";
-        } else {
-            imageDiv.style.backgroundColor = "#f0f0f0";
-        }
-
-        const contentDiv = document.getElementById("dynamicTeaserContent");
-        contentDiv.innerHTML = `
-            <h3>${escapeHtml(title)}</h3>
-            <p>${escapeHtml(benefits)}</p>
-            <a href="${TEST_URL}" class="teaser-btn" target="_self" rel="noopener noreferrer">Mehr erfahren</a>
-        `;
-    }
-
-    function showTeaserNoOffers() {
-        document.getElementById("dynamicTeaserImage").style.backgroundColor = "#f0f0f0";
-        document.getElementById("dynamicTeaserContent").innerHTML = `<div class="no-offers-message">📭 No Offers available</div>`;
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    async function loadAllContent() {
-        const subjectId = document.getElementById("subjectIdInput").value.trim();
-        if (!subjectId) { alert("Bitte eine SubjectID eingeben"); return; }
-
-        document.getElementById("stageContent").innerHTML = '<div class="loader">Lade Stage...</div>';
-        document.getElementById("dynamicTeaserImage").style.backgroundImage = "none";
-        document.getElementById("dynamicTeaserContent").innerHTML = '<div class="loader">Lade Inhalt...</div>';
-
-        try {
-            const stageRes = await fetchPegaContainer(subjectId, "GetStage");
-            if (hasNoOffers(stageRes, "GetStage")) {
-                showStageNoOffers();
-            } else {
-                renderStage(extractFirstResult(stageRes, "GetStage"));
-            }
-        } catch (e) {
-            showStageNoOffers();
-        }
-
-        try {
-            const teaserRes = await fetchPegaContainer(subjectId, "GetTeaser");
-            if (hasNoOffers(teaserRes, "GetTeaser")) {
-                showTeaserNoOffers();
-            } else {
-                renderMiddleTeaser(extractFirstResult(teaserRes, "GetTeaser"));
-            }
-        } catch (e) {
-            showTeaserNoOffers();
-        }
-    }
-
-    function bindStaticButtons() {
-        document.querySelector('.static-left')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = '#';
-        });
-        document.querySelector('.static-right')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = '#';
-        });
-    }
-
-    document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
-    document.addEventListener("DOMContentLoaded", () => {
-        loadAllContent();
-        bindStaticButtons();
-    });
-</script>
+<script src="./javascript/realtimecontainerscript.js"></script>
 </body>
 </html>
