@@ -1,9 +1,6 @@
 // Pega CDH Endpoint
 const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
 
-// Test-URL (für Testzwecke – kann auf Pega-URL umgestellt werden)
-// const TEST_URL = "https://www.otto.de";
-
 // Lade Stage- und Teaser-HTML-Fragmente
 async function loadHtmlFragments() {
     try {
@@ -36,6 +33,8 @@ async function fetchPegaContainer(subjectId, containerName) {
         "AppID": "MEKK"
     };
     
+    console.log("Request an Pega:", payload);
+    
     const response = await fetch(PEGA_ENDPOINT, {
         method: "POST",
         headers: { 
@@ -46,7 +45,9 @@ async function fetchPegaContainer(subjectId, containerName) {
     });
     
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return await response.json();
+    const data = await response.json();
+    console.log("Response von Pega:", data);
+    return data;
 }
 
 function hasNoOffers(response, containerName) {
@@ -70,7 +71,9 @@ function renderStage(result) {
     const title = result.ShortDescription || result.Label || "Ihr persönliches Angebot";
     const benefits = result.Benefits || "";
     const imageUrl = result.ImageURL || "";
-    const clickThroughUrl = TEST_URL; // Hier kann auf result.ClickThroughURL umgestellt werden
+    const clickThroughUrl = result.ClickThroughURL || "#";
+    
+    console.log("Stage URL:", clickThroughUrl);
     
     const stageDiv = document.querySelector('#stageContent .stage-content');
     if (stageDiv) {
@@ -113,7 +116,9 @@ function renderTeaser(result) {
     const title = result.ShortDescription || result.Label || "Service-Tipp";
     const benefits = result.Benefits || "";
     const imageUrl = result.ImageURL || "";
-    const clickThroughUrl = TEST_URL; // Hier kann auf result.ClickThroughURL umgestellt werden
+    const clickThroughUrl = result.ClickThroughURL || "#";
+    
+    console.log("Teaser URL:", clickThroughUrl);
     
     const imageDiv = document.getElementById('teaserImage');
     if (imageDiv) {
@@ -167,10 +172,15 @@ async function loadAllContent() {
     }
     
     // Lade-Modus anzeigen
-    document.getElementById('stageTitle').textContent = "Lade Stage...";
-    document.getElementById('stageBenefits').textContent = "";
-    document.getElementById('teaserTitle').textContent = "Lade Teaser...";
-    document.getElementById('teaserBenefits').textContent = "";
+    const stageTitle = document.getElementById('stageTitle');
+    const stageBenefits = document.getElementById('stageBenefits');
+    const teaserTitle = document.getElementById('teaserTitle');
+    const teaserBenefits = document.getElementById('teaserBenefits');
+    
+    if (stageTitle) stageTitle.textContent = "Lade Stage...";
+    if (stageBenefits) stageBenefits.textContent = "";
+    if (teaserTitle) teaserTitle.textContent = "Lade Teaser...";
+    if (teaserBenefits) teaserBenefits.textContent = "";
     
     // Stage laden
     try {
