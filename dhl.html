@@ -478,17 +478,6 @@
 <script>
     const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
 
-    function openPegaUrl(url) {
-        if (!url || url === "#" || url === "about:blank") return;
-        try {
-            const decoded = decodeURI(url);
-            const cleaned = encodeURI(decoded);
-            window.location.href = cleaned;
-        } catch(e) {
-            window.location.href = url;
-        }
-    }
-
     async function fetchPegaContainer(subjectId, containerName) {
         const payload = {
             "SubjectID": subjectId,
@@ -532,15 +521,10 @@
                 <div class="stage-text-box">
                     <h2>${escapeHtml(title)}</h2>
                     <p>${escapeHtml(benefits)}</p>
-                    <a href="#" class="stage-btn" data-url="${escapeHtml(clickThroughUrl)}">Weiter</a>
+                    <a href="${escapeHtml(clickThroughUrl)}" class="stage-btn" target="_self" rel="noopener noreferrer">Weiter</a>
                 </div>
             </div>
         `;
-        const btn = container.querySelector('.stage-btn');
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openPegaUrl(btn.dataset.url);
-        });
     }
 
     function showStageNoOffers() {
@@ -572,13 +556,8 @@
         contentDiv.innerHTML = `
             <h3>${escapeHtml(title)}</h3>
             <p>${escapeHtml(benefits)}</p>
-            <a href="#" class="teaser-btn" data-url="${escapeHtml(clickThroughUrl)}">Mehr erfahren</a>
+            <a href="${escapeHtml(clickThroughUrl)}" class="teaser-btn" target="_self" rel="noopener noreferrer">Mehr erfahren</a>
         `;
-        const btn = contentDiv.querySelector('.teaser-btn');
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openPegaUrl(btn.dataset.url);
-        });
     }
 
     function showTeaserNoOffers() {
