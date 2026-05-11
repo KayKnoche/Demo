@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL - Pega CDH RealTime Container</title>
+    <title>DHL - Pega CDH RealTime Container (Test: OTTO.de)</title>
     <style>
         * {
             margin: 0;
@@ -373,7 +373,7 @@
 <body>
 <div class="wrapper">
     <div class="top-bar">
-        <div class="logo">DHL <span>powered by Pega CDH</span></div>
+        <div class="logo">DHL <span>Test: OTTO.de</span></div>
         <div class="main-nav">
             <a href="#">Pakete versenden</a>
             <a href="#">Pakete empfangen</a>
@@ -388,7 +388,7 @@
 
     <div class="content">
         <div class="stage-container">
-            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH)</div>
+            <div class="stage-label">📢 STAGE (dynamisch via Pega CDH – Link auf OTTO.de)</div>
             <div class="stage-content" id="stageContent">
                 <div class="loader">Lade Stage-Inhalte von Pega CDH...</div>
             </div>
@@ -403,7 +403,7 @@
         </div>
 
         <div class="teaser-container">
-            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH - mittlere Kachel)</div>
+            <div class="teaser-label">🎯 TEASER (dynamisch via Pega CDH – Link auf OTTO.de)</div>
             <div class="teaser-grid">
                 <div class="teaser-card">
                     <div class="teaser-card-image" style="background-image: url('https://www.dhl.de/content/dam/images/pega/pk/teaser-img-individual-ma-packstation-dhl-de.png');"></div>
@@ -508,12 +508,14 @@
         return container.RankedResults[0];
     }
 
+    // ⭐ Hier wird die URL auf OTTO.de gesetzt, unabhängig von Pega
+    const TEST_URL = "https://www.otto.de";
+
     function renderStage(result) {
         const container = document.getElementById("stageContent");
         const imageUrl = result.ImageURL || "";
         const title = result.ShortDescription || result.Label || "Ihr persönliches Angebot";
         const benefits = result.Benefits || "";
-        const clickThroughUrl = result.ClickThroughURL || "#";
 
         const bgStyle = imageUrl ? `background-image: url('${escapeHtml(imageUrl)}');` : 'background-color: #333;';
         container.innerHTML = `
@@ -521,7 +523,7 @@
                 <div class="stage-text-box">
                     <h2>${escapeHtml(title)}</h2>
                     <p>${escapeHtml(benefits)}</p>
-                    <a href="${escapeHtml(clickThroughUrl)}" class="stage-btn" target="_self" rel="noopener noreferrer">Weiter</a>
+                    <a href="${TEST_URL}" class="stage-btn" target="_self" rel="noopener noreferrer">Weiter</a>
                 </div>
             </div>
         `;
@@ -542,7 +544,6 @@
         const imageUrl = result.ImageURL || "";
         const title = result.ShortDescription || result.Label || "Service-Tipp";
         const benefits = result.Benefits || "";
-        const clickThroughUrl = result.ClickThroughURL || "#";
 
         const imageDiv = document.getElementById("dynamicTeaserImage");
         if (imageUrl) {
@@ -556,7 +557,7 @@
         contentDiv.innerHTML = `
             <h3>${escapeHtml(title)}</h3>
             <p>${escapeHtml(benefits)}</p>
-            <a href="${escapeHtml(clickThroughUrl)}" class="teaser-btn" target="_self" rel="noopener noreferrer">Mehr erfahren</a>
+            <a href="${TEST_URL}" class="teaser-btn" target="_self" rel="noopener noreferrer">Mehr erfahren</a>
         `;
     }
 
