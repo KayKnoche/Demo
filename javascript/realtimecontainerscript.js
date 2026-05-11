@@ -2,7 +2,7 @@
 const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
 
 // Test-URL (für Testzwecke – kann auf Pega-URL umgestellt werden)
-const TEST_URL = "https://www.otto.de";
+// const TEST_URL = "https://www.otto.de";
 
 // Lade Stage- und Teaser-HTML-Fragmente
 async function loadHtmlFragments() {
