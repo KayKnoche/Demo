@@ -1,5 +1,5 @@
 // Pega CDH Endpoint
-const PEGA_ENDPOINT = "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
+const PEGA_ENDPOINT = "https://depst-mara-prod1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
 
 // Lade Stage- und Teaser-HTML-Fragmente
 async function loadHtmlFragments() {
