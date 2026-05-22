@@ -1,7 +1,26 @@
-<div class="stage-content" style="background-color: #333;">
-    <div class="stage-text-box">
-        <h2 id="stageTitle">Ihr persönliches Angebot</h2>
-        <p id="stageBenefits">Lade Angebot...</p>
-        <a href="#" id="stageLink" class="stage-btn" target="_self" rel="noopener noreferrer">Weiter</a>
+<div class="stage-content" style="background-size: cover; background-position: center; min-height: 320px; display: flex; align-items: center; position: relative;">
+    <div style="background: linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 100%); width: 100%; padding: 48px 40px; border-radius: 0;">
+        <div style="max-width: 600px;">
+            <div style="display: inline-block; background: #ffcc00; color: #1a1a1a; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 0.5px;">
+                ⚡ PERSÖNLICHE EMPFEHLUNG
+            </div>
+            <h2 id="stageTitle" style="color: white; font-size: 32px; font-weight: 800; margin-bottom: 16px; line-height: 1.2;">
+                Ihr Angebot
+            </h2>
+            <p id="stageBenefits" style="color: rgba(255,255,255,0.92); font-size: 16px; margin-bottom: 28px; line-height: 1.5;">
+                &nbsp;
+            </p>
+            <a id="stageLink" href="#" class="stage-cta" style="display: inline-block; background: #ffcc00; color: #1a1a1a; padding: 12px 32px; border-radius: 40px; text-decoration: none; font-weight: 700; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                Zum Angebot → 
+            </a>
+        </div>
     </div>
 </div>
+
+<style>
+    .stage-cta:hover {
+        background: #e6b800;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+</style>
