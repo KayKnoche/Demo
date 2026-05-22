@@ -1,5 +1,85 @@
-// Pega CDH Endpoint
-const PEGA_ENDPOINT = "https://depst-mara-prod1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container";
+// Pega CDH Endpoints
+const PEGA_ENDPOINTS = {
+    stage: "https://depst-mara-stg1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container",
+    prod: "https://depst-mara-prod1-decisionhub.pegacloud.net/prweb/api/PegaMKTContainer/V3/Container"
+};
+
+let currentEnvironment = "stage"; // stage oder prod
+
+// SubjectID History (getrennt nach Umgebung)
+function loadHistoryForEnv(env) {
+    const key = `subjectIdHistory_${env}`;
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : [];
+}
+
+function saveHistoryForEnv(env, history) {
+    const key = `subjectIdHistory_${env}`;
+    // Nur max. 10 speichern
+    const limited = history.slice(0, 10);
+    localStorage.setItem(key, JSON.stringify(limited));
+}
+
+function addSubjectIdToHistory(env, subjectId) {
+    if (!subjectId) return;
+    let history = loadHistoryForEnv(env);
+    // Entferne evtl. vorhandenen Eintrag (damit er nach vorne rutscht)
+    history = history.filter(id => id !== subjectId);
+    // Füge neuen an den Anfang
+    history.unshift(subjectId);
+    saveHistoryForEnv(env, history);
+    updateDatalistForCurrentEnv();
+}
+
+function updateDatalistForCurrentEnv() {
+    const history = loadHistoryForEnv(currentEnvironment);
+    const datalist = document.getElementById('subjectIdHistory');
+    if (datalist) {
+        datalist.innerHTML = '';
+        history.forEach(id => {
+            const option = document.createElement('option');
+            option.value = id;
+            datalist.appendChild(option);
+        });
+    }
+}
+
+// Umgebung wechseln
+function setEnvironment(env) {
+    currentEnvironment = env;
+    
+    // Radio-Buttons aktualisieren
+    const stageRadio = document.getElementById('stageEnv');
+    const prodRadio = document.getElementById('prodEnv');
+    if (stageRadio && prodRadio) {
+        if (env === 'stage') stageRadio.checked = true;
+        else prodRadio.checked = true;
+    }
+    
+    // Badge aktualisieren
+    const indicator = document.getElementById('envIndicator');
+    if (indicator) {
+        if (env === 'stage') {
+            indicator.textContent = '⚙️ Stage';
+            indicator.className = 'env-badge stage-badge';
+        } else {
+            indicator.textContent = '🚀 Prod';
+            indicator.className = 'env-badge prod-badge';
+        }
+    }
+    
+    // Datalist für neue Umgebung laden
+    updateDatalistForCurrentEnv();
+    
+    // Input-Feld leeren oder aktuelle SubjectID aus History vorbelegen?
+    const input = document.getElementById('subjectIdInput');
+    if (input) {
+        const history = loadHistoryForEnv(env);
+        input.value = history[0] || '';
+    }
+    
+    // Optional: automatisch neu laden? (lasse ich erstmal aus)
+}
 
 // Lade Stage- und Teaser-HTML-Fragmente
 async function loadHtmlFragments() {
@@ -21,8 +101,9 @@ async function loadHtmlFragments() {
     }
 }
 
-// Pega Request
+// Pega Request (verwendet currentEnvironment)
 async function fetchPegaContainer(subjectId, containerName) {
+    const endpoint = PEGA_ENDPOINTS[currentEnvironment];
     const payload = {
         "SubjectID": subjectId,
         "ContextName": "Customer",
@@ -33,9 +114,9 @@ async function fetchPegaContainer(subjectId, containerName) {
         "AppID": "MEKK"
     };
     
-    console.log("Request an Pega:", payload);
+    console.log(`Request an Pega (${currentEnvironment}):`, payload);
     
-    const response = await fetch(PEGA_ENDPOINT, {
+    const response = await fetch(endpoint, {
         method: "POST",
         headers: { 
             "Content-Type": "application/json", 
@@ -46,7 +127,7 @@ async function fetchPegaContainer(subjectId, containerName) {
     
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    console.log("Response von Pega:", data);
+    console.log(`Response von Pega (${currentEnvironment}):`, data);
     return data;
 }
 
@@ -111,7 +192,7 @@ function showStageNoOffers() {
     if (linkEl) linkEl.href = "#";
 }
 
-// Teaser (mittlere Kachel) befüllen
+// Teaser befüllen
 function renderTeaser(result) {
     const title = result.ShortDescription || result.Label || "Service-Tipp";
     const benefits = result.Benefits || "";
@@ -163,6 +244,9 @@ async function loadAllContent() {
         alert("Bitte eine SubjectID eingeben"); 
         return; 
     }
+    
+    // SubjectID in History der aktuellen Umgebung speichern
+    addSubjectIdToHistory(currentEnvironment, subjectId);
     
     // Lade HTML-Fragmente, falls noch nicht geladen
     if (!window.fragmentsLoaded) {
@@ -224,8 +308,15 @@ function bindStaticButtons() {
 // Event Listener
 document.getElementById("loadContentBtn").addEventListener("click", loadAllContent);
 
+// Toggle-Eventlistener
+document.getElementById("stageEnv")?.addEventListener("change", () => setEnvironment("stage"));
+document.getElementById("prodEnv")?.addEventListener("change", () => setEnvironment("prod"));
+
 // Initialisierung
 document.addEventListener("DOMContentLoaded", async () => {
+    // Standard: Stage
+    setEnvironment("stage");
+    
     await loadHtmlFragments();
     await loadAllContent();
     bindStaticButtons();
